@@ -1,0 +1,8 @@
+﻿using MotoVerse.Core.Features.ReviewProductFeature.Queries.Responses;
+
+namespace MotoVerse.Core.Features.ReviewProductFeature.Queries.Models;
+
+public class GetReviewProductListQuery : IRequest<Response<List<GetReviewProductListResponse>>>
+{
+
+}

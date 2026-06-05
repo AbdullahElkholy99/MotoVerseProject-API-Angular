@@ -1,0 +1,41 @@
+<div class="dashboard-shell" [class.sidebar-collapsed]="!sidebarOpen()">
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <div class="brand__mark"><img src="assets/images/logo1.png" alt="M" /></div>
+      <div>
+        <span class="brand__title">Motoverse Dashboard</span>
+        <small>Control panel</small>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.link"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [appTooltip]="sidebarOpen() ? '' : item.label"
+      >
+        <i [class]="item.icon"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <button type="button" class="sidebar-toggle" (click)="toggleSidebar()">
+        <i class="ri-menu-line"></i>
+        <span>Toggle menu</span>
+      </button>
+    </div>
+  </aside>
+
+  <section class="content-area">
+    <!-- top bar -->
+    <app-top-bar (sidebarOpen)="toggleSidebar()" />
+
+    <!-- content-body -->
+    <main class="content-body">
+      <router-outlet></router-outlet>
+    </main>
+  </section>
+</div>

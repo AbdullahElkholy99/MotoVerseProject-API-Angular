@@ -1,0 +1,143 @@
+<div class="motorcycle-modal">
+  <!-- HEADER -->
+  <div class="modal-header">
+    <div>
+      <h2>Add Motorcycle</h2>
+
+      <p>Create a new motorcycle and add it to inventory.</p>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <form class="motorcycle-form" [formGroup]="form" (ngSubmit)="submit()">
+    <!-- NameAr -->
+    <div class="form-group">
+      <label>NameAr</label>
+
+      <input type="text" formControlName="nameAr" placeholder="Hondas" />
+    </div>
+
+    <!-- NameEn -->
+    <div class="form-group">
+      <label>NameEn</label>
+
+      <input type="text" formControlName="nameEn" placeholder="Honda" />
+    </div>
+    <!-- BRAND -->
+    <div class="form-group">
+      <label>Brand</label>
+
+      <input type="text" formControlName="brand" placeholder="Honda" />
+    </div>
+    <!-- MODEL -->
+    <div class="form-group">
+      <label>Model</label>
+
+      <input type="text" formControlName="model" placeholder="CBR 600" />
+    </div>
+
+    <!-- YEAR -->
+    <div class="form-group">
+      <label>Year</label>
+
+      <input type="number" formControlName="year" placeholder="2024" />
+    </div>
+
+    <!-- COLOR -->
+    <div class="form-group">
+      <label>Color</label>
+
+      <input type="text" formControlName="color" placeholder="Black" />
+    </div>
+
+    <!-- PLATE -->
+    <div class="form-group">
+      <label>Plate Number</label>
+
+      <input type="text" formControlName="plateNumber" placeholder="ABC-123" />
+    </div>
+
+    <!-- ENGINE -->
+    <div class="form-group">
+      <label>Engine CC</label>
+
+      <input type="number" formControlName="engineCC" placeholder="600" />
+    </div>
+
+    <!-- PRICE -->
+    <div class="form-group">
+      <label>Price Per Day</label>
+
+      <input type="number" formControlName="pricePerDay" placeholder="120" />
+    </div>
+
+    <!-- STATUS -->
+    <div class="form-group">
+      <label>Status</label>
+
+      <select formControlName="status">
+        @for (status of statusOptions; track status.value) {
+          <option [value]="status.value">
+            {{ status.label }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="form-group full-width">
+      <label>Description</label>
+
+      <textarea rows="4" formControlName="description" placeholder="Motorcycle description...">
+      </textarea>
+    </div>
+
+    <!-- IMAGE -->
+ <!-- MAIN IMAGE -->
+    <div class="form-group full-width">
+      <app-image-upload
+        label="Motorcycle Main Image"
+        [preview]="
+          imagePreview()
+            ? 'https://localhost:7081/images/motorcycle/' + imagePreview()
+            : 'assets/images/defualt.jpg'
+        "
+        onImageSelected(file:
+        File)
+      >
+      </app-image-upload>
+    </div>
+
+    <!-- MULTIPLE IMAGES -->
+    <div class="form-group full-width">
+      <label>Motorcycle Multiple Images</label>
+
+      <input type="file" multiple accept="image/*" (change)="onMultipleImagesSelected($event)" />
+
+      <div class="images-previews">
+        @for (image of imagePreviews(); track $index) {
+          <div class="image-item">
+            <app-image-upload label=""[preview]=" image
+            ?  image
+            : 'assets/images/defualt.jpg'" />
+            <button type="button" (click)="removeImage($index)">Delete Image</button>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- PREVIEW -->
+    @if (imagePreview()) {
+      <div class="image-preview full-width">
+        <img [src]="imagePreview()" alt="Preview" />
+      </div>
+    }
+
+    <!-- FOOTER -->
+    <div class="modal-footer full-width">
+      <button type="submit" class="submit-btn" [disabled]="isSubmitting">
+         {{ isSubmitting ? 'Creating...' : 'Create Motorcycle' }}
+      </button>
+    </div>
+  </form>
+</div>

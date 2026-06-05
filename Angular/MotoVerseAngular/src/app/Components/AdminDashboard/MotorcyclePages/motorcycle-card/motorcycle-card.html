@@ -1,0 +1,71 @@
+<div class="motorcycle-card">
+  <!-- IMAGE -->
+  <div class="motorcycle-image-wrapper">
+    <img
+      class="motorcycle-image"
+      [src]="
+        motorcycle.imagePath
+          ? 'https://localhost:7081/images/motorcycle/' + motorcycle.imagePath
+          : 'assets/images/defualt.jpg'
+      "
+      [alt]="motorcycle.brand"
+      (error)="$any($event.target).src = 'assets/images/defualt.jpg'"
+    />
+
+    <span class="status-badge">
+      {{ statusMap[motorcycle.status] }}
+    </span>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="motorcycle-body">
+    <h2>{{ motorcycle.nameEn }}</h2>
+
+    <p class="motorcycle-description">
+      {{ motorcycle.description || 'No description available for this motorcycle.' }}
+    </p>
+
+    <!-- DETAILS -->
+    <div class="motorcycle-details">
+      <div class="detail-item">
+        <span>Model</span>
+        <strong>{{ motorcycle.model }}</strong>
+      </div>
+      <div class="detail-item">
+        <span>Brand</span>
+        <strong>{{ motorcycle.brand }}</strong>
+      </div>
+
+      @if (motorcycle.color) {
+        <div class="detail-item">
+          <span>Color</span>
+          <strong>{{ motorcycle.color }}</strong>
+        </div>
+      }
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="motorcycle-actions">
+      <app-ui-button
+        label="Update"
+        icon="ri-pencil-line"
+        type="edit"
+        (click)="emitUpdate(motorcycle.id)"
+      />
+
+      <app-ui-button
+        label="Delete"
+        icon="ri-delete-bin-line"
+        type="delete"
+        (click)="emitDelete(motorcycle.id)"
+      />
+        <app-ui-button
+        label="Details"
+        icon="ri-details-bin-line"
+        type="details"
+          (click)="emitDetails(motorcycle.id)"
+
+      />
+    </div>
+  </div>
+</div>

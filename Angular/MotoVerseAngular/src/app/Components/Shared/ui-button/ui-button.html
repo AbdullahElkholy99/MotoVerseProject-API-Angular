@@ -1,0 +1,17 @@
+<button
+  class="ui-btn"
+  [appTooltip]="tooltip"
+  [ngClass]="[
+    'ui-btn--' + type,
+    fullWidth ? 'ui-btn--full' : '',
+    iconOnly ? 'ui-btn--icon' : ''
+  ]"
+  [disabled]="disabled"
+  (click)="onClick()"
+>
+  <i *ngIf="icon" [class]="icon"></i>
+
+  <span *ngIf="!iconOnly">
+    {{ label }}
+  </span>
+</button>

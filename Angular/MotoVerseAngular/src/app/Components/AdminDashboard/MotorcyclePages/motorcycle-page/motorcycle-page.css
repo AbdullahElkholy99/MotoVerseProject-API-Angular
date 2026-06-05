@@ -1,0 +1,319 @@
+
+:root {
+  --primary-color: #f0a13a;
+  --background-color: #0d0d0d;
+  --card-background: #141414;
+  --border-color: #242424;
+  --text-light: #767268;
+  --white: #ffffff;
+}
+
+/* ====================== */
+
+.motorcycles-page {
+  padding: 32px;
+  min-height: 100vh;
+  color: var(--white);
+   width: 100%;
+     overflow-x: hidden;
+
+}
+
+/* ====================== */
+/* HEADER */
+
+.motorcycles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.header-content h1 {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+.header-content p {
+  color: var(--text-light);
+}
+
+/* ====================== */
+/* FILTERS */
+
+.filters-container {
+  background: var(--card-background);
+
+  border: 1px solid var(--border-color);
+
+  border-radius: 20px;
+
+  padding: 24px;
+
+  margin-bottom: 32px;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
+
+  gap: 20px;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-item label {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.filter-item input,
+.filter-item select {
+  height: 52px;
+
+  border-radius: 14px;
+
+  border: 1px solid var(--border-color);
+
+  background: #1b1b1b;
+
+  color: var(--white);
+
+  padding: 0 16px;
+
+  font-size: 15px;
+}
+
+.filter-item input:focus,
+.filter-item select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.filter-buttons {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.btn-filter {
+  height: 52px;
+
+  border: none;
+  border-radius: 14px;
+
+  padding: 0 22px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+
+/* ====================== */
+/* GRID */
+
+.motorcycles-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+
+  gap: 24px;
+
+  width: 100%;
+}
+
+/* ====================== */
+/* PAGINATION */
+
+.pagination-container {
+  margin-top: 40px;
+
+  display: flex;
+  justify-content: center;
+}
+
+/* ====================== */
+/* RESPONSIVE */
+/* ====================== */
+/* RESPONSIVE */
+/* ====================== */
+
+/* LARGE TABLETS */
+@media (max-width: 1200px) {
+
+  .filters-container {
+
+    grid-template-columns:
+      repeat(3, minmax(180px, 1fr));
+  }
+
+  .motorcycles-grid {
+
+    grid-template-columns:
+      repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+/* ====================== */
+/* TABLETS */
+
+@media (max-width: 992px) {
+
+  .motorcycles-page {
+    padding: 24px;
+  }
+
+  .motorcycles-header {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .header-content h1 {
+    font-size: 30px;
+  }
+
+  .filters-container {
+
+    grid-template-columns:
+      repeat(2, minmax(180px, 1fr));
+
+    padding: 20px;
+  }
+
+  .filter-buttons {
+
+    grid-column: span 2;
+
+    justify-content: flex-start;
+  }
+
+  .motorcycles-grid {
+
+    grid-template-columns:
+      repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+/* ====================== */
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+  .motorcycles-page {
+    padding: 18px;
+  }
+
+  .header-content h1 {
+    font-size: 26px;
+  }
+
+  .header-content p {
+    font-size: 14px;
+  }
+
+  .filters-container {
+
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+
+    padding: 18px;
+  }
+
+  .filter-buttons {
+
+    grid-column: span 1;
+
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .btn-filter {
+    width: 100%;
+  }
+
+  .motorcycles-grid {
+
+    grid-template-columns: 1fr;
+  }
+
+  .pagination-container {
+    margin-top: 28px;
+  }
+}
+
+/* ====================== */
+/* SMALL MOBILE */
+
+@media (max-width: 480px) {
+
+  .motorcycles-page {
+    padding: 14px;
+  }
+
+  .header-content h1 {
+    font-size: 22px;
+  }
+
+  .filters-container {
+
+    border-radius: 16px;
+
+    padding: 14px;
+  }
+
+  .filter-item input,
+  .filter-item select {
+
+    height: 48px;
+
+    font-size: 14px;
+  }
+
+  .btn-filter {
+
+    height: 48px;
+
+    font-size: 14px;
+  }
+
+  .motorcycles-grid {
+    gap: 18px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

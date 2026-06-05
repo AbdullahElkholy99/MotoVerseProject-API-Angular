@@ -1,0 +1,159 @@
+<section class="dashboard-grid">
+
+  <div class="col">
+
+    <div class="dashboard-grid__cards">
+      <app-metric-card
+        icon="ri-money-dollar-circle-line"
+        label="Total Revenue"
+        [value]="'$' + (data.totalRevenue() | number: '1.0-0')"
+        change="+12.4% this month"
+        accent="success"
+      ></app-metric-card>
+      <app-metric-card
+        icon="ri-shopping-cart-2-line"
+        label="Total Orders"
+        [value]="data.totalOrders()"
+        change="+8.2%"
+        accent="primary"
+      ></app-metric-card>
+      <app-metric-card
+        icon="ri-user-3-line"
+        label="Total Customers"
+        [value]="data.totalCustomers()"
+        change="+4.9%"
+        accent="warning"
+      ></app-metric-card>
+      <app-metric-card
+        icon="ri-store-2-line"
+        label="Total Products"
+        [value]="data.totalProducts()"
+        change="+6.5%"
+        accent="error"
+      ></app-metric-card>
+    </div>
+
+    <aside class="dashboard-secondary">
+      <section class="status-grid">
+        <div
+          *ngFor="let status of data.orderStatuses()"
+          class="status-card status-card--{{ status.accent }}"
+        >
+          <span>{{ status.label }}</span>
+          <strong>{{ status.value }}</strong>
+        </div>
+      </section>
+
+      <section class="top-products">
+        <div class="section-title">
+          <h3>Top Selling Products</h3>
+          <a routerLink="/products">View all</a>
+        </div>
+        <div class="product-list">
+          <article *ngFor="let product of data.topSellingProducts()" class="product-item">
+            <img [src]="product.image" [alt]="product.name" />
+            <div>
+              <h4>{{ product.name }}</h4>
+              <span>{{ product.category }}</span>
+            </div>
+            <strong>${{ product.price }}</strong>
+          </article>
+        </div>
+      </section>
+    </aside>
+
+  </div>
+
+  <div class="col">
+    <article class="analytics-card">
+      <div class="analytics-card__header">
+        <div>
+          <h2>Sales Analytics</h2>
+          <p>Revenue performance over the last 6 months.</p>
+        </div>
+        <span class="badge">+14.8%</span>
+      </div>
+      <div class="analytics-chart">
+        <div class="analytics-chart__labels">
+          <span *ngFor="let point of data.revenueSeries()">{{ point.month }}</span>
+        </div>
+        <div class="analytics-chart__bars">
+         <div
+  *ngFor="let point of data.revenueSeries()"
+  class="analytics-chart__bar"
+  [style.height.%]="(point.value / 41000) * 100"
+>
+  <span class="analytics-chart__value">
+    ${{ point.value / 1000 }}k
+  </span>
+
+  <span class="analytics-chart__month">
+    {{ point.month }}
+  </span>
+</div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="tables-grid">
+  <div class="table-card">
+    <div class="table-card__header">
+      <h3>Recent Orders</h3>
+      <a routerLink="/orders">See all orders</a>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Payment</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of data.recentOrders()">
+          <td>{{ order.id }}</td>
+          <td>{{ order.customer }}</td>
+          <td>{{ order.date }}</td>
+          <td>${{ order.totalPrice }}</td>
+          <td>
+            <span
+              class="pill pill--{{
+                order.paymentStatus === 'Paid'
+                  ? 'success'
+                  : order.paymentStatus === 'Pending'
+                    ? 'warning'
+                    : 'error'
+              }}"
+              >{{ order.paymentStatus }}</span
+            >
+          </td>
+          <td>
+            <span class="pill pill--info">{{ order.deliveryStatus }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="customer-card">
+    <div class="section-title">
+      <h3>Recent Customers</h3>
+      <a routerLink="/customers">View customers</a>
+    </div>
+    <div class="customer-list">
+      <article *ngFor="let customer of data.recentCustomers()" class="customer-item">
+        <img [src]="customer.avatar" [alt]="customer.name" />
+        <div>
+          <h4>{{ customer.name }}</h4>
+          <span>{{ customer.email }}</span>
+        </div>
+        <strong>{{ customer.orders }} orders</strong>
+      </article>
+    </div>
+  </div>
+</section>

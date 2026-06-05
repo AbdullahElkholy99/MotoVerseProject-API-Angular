@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>08e6ed6d-ef03-4df1-8a1c-dd7839a8207a</UserSecretsId>
+  </PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\MotoVerse.Entities\MotoVerse.Entities.csproj" />
+		<ProjectReference Include="..\MotoVerse.Infrastructure\MotoVerse.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Features\AI\" />
+		<Folder Include="Features\Auth\AuthenticationFeature\Query\Handles\" />
+		<Folder Include="Features\Auth\AuthenticationFeature\Query\Models\" />
+		<Folder Include="Features\Auth\AuthenticationFeature\Query\Validators\" />
+		<Folder Include="Features\Auth\ConfirmEmailFeature\Command\Handlers\" />
+		<Folder Include="Features\Auth\ConfirmEmailFeature\Command\Models\" />
+		<Folder Include="Features\Auth\ConfirmEmailFeature\Command\Validators\" />
+		<Folder Include="Features\Auth\CurrentUserFeature\Commands\Handlers\" />
+		<Folder Include="Features\Auth\CurrentUserFeature\Commands\Models\" />
+		<Folder Include="Features\Auth\CurrentUserFeature\Commands\Validatiors\" />
+		<Folder Include="Features\Auth\RefreshTokenFeature\Command\Validators\" />
+		<Folder Include="Features\Auth\RefreshTokenFeature\Query\Validators\" />
+		<Folder Include="Features\CategoryFeature\Queries\Validations\" />
+		<Folder Include="Features\MotorcycleFeatures\BasketFeature\Queries\Validations\" />
+		<Folder Include="Features\MotorcycleFeatures\MotorcycleImageFeature\Queries\Validations\" />
+		<Folder Include="Features\MotorcycleFeatures\BookingFeature\Queries\Validations\" />
+		<Folder Include="Features\MotorcycleFeatures\MotorcycleFeature\Queries\Validations\" />
+		<Folder Include="Features\ProductFetatures\ReviewProductFeature\Queries\Validations\" />
+		<Folder Include="Features\ProductFetatures\ProductFeature\Queries\Validations\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.8" />	
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="10.0.8" />
+		
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+		
+		<PackageReference Include="Hangfire" Version="1.8.23" />
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.23" />
+		<PackageReference Include="Hangfire.Core" Version="1.8.23" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.23" />
+		
+		<PackageReference Include="MediatR" Version="14.1.0" />
+		
+     	<PackageReference Include="FluentValidation" Version="12.1.1" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+		<PackageReference Include="Serilog" Version="4.3.1" />
+
+
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.8" />
+
+		
+		<!--AI-->
+		<PackageReference Include="Microsoft.Extensions.AI" Version="10.6.0" />
+		<PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.6.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.8" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.8" />
+	</ItemGroup>
+</Project>

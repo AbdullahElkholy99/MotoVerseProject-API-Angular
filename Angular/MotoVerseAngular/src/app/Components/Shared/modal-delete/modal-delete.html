@@ -1,0 +1,30 @@
+<div class="overlay" *ngIf="visible">
+
+  <div class="delete-modal">
+
+    <div class="icon"   [ngClass]="iconColor">
+      {{icon}}
+    </div>
+
+    <h2>{{ title }}</h2>
+
+    <p>{{ message }}</p>
+
+    <div class="actions">
+
+      <button
+        class="cancel-btn"
+        (click)="close()">
+        Cancel
+      </button>
+      <button
+        [class]="labelColor"
+        (click)="confirm()">
+        {{labelBtn}}
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

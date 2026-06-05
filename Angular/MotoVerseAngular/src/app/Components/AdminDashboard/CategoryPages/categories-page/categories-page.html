@@ -1,0 +1,144 @@
+<section class="page-header">
+  <div>
+    <h2>Categories</h2>
+    <p>Manage product categories, view inventory distribution, and prioritize your catalog.</p>
+  </div>
+
+  <div class="header-actions">
+    <div class="search-box">
+      <i class="pi pi-search search-icon"></i>
+
+      <input
+        type="text"
+        placeholder="Search categories..."
+        class="search-input"
+        [(ngModel)]="search"
+        (input)="onSearch()"
+      />
+    </div>
+
+    <app-ui-button
+      label="Add New Category"
+      icon="ri-add-line"
+      type="create"
+      (click)="showAddCategoryModal = true"
+    ></app-ui-button>
+  </div>
+</section>
+
+@if (categories().length > 0) {
+  <div class="categories-card">
+    <div class="category-list">
+      @for (category of categories(); track category.id) {
+        <div class="category-card">
+          <!-- Image -->
+          <div class="category-image">
+            <img
+              [src]="
+                category.imagePath
+                  ? 'https://localhost:7081/images/category/' + category.imagePath
+                  : 'assets/images/no-image.png'
+              "
+              [alt]="category.name"
+              (error)="$event.target.src = 'assets/images/no-image.png'"
+            />
+          </div>
+
+          <!-- Content -->
+          <div class="category-content">
+            <h3>{{ category.name }}</h3>
+
+            <p>
+              {{
+                category.description ||
+                  'Use this section to organize products, collections, and promotions.'
+              }}
+            </p>
+
+            <span class="category-count">
+              {{ category.productCount }}
+              items
+            </span>
+          </div>
+
+          <!-- Actions -->
+          <div class="category-actions">
+            <app-ui-button
+              label="Delete"
+              icon="ri-delete-bin-line"
+              type="delete"
+              (click)="openDeleteModal(category.id)"
+            ></app-ui-button>
+
+            <app-ui-button
+              label="Update"
+              icon="ri-pencil-line"
+              type="edit"
+              (click)="openUpdateModal(category.id)"
+            ></app-ui-button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- pagination-wrapper -->
+    <div class="pagination-wrapper">
+      <app-pagination
+        [totalItems]="totalItems"
+        [itemsPerPage]="itemsPerPage"
+        [currentPage]="currentPage"
+        (pageChanged)="pageChanged($event)"
+      >
+      </app-pagination>
+    </div>
+  </div>
+} @else {
+  <app-no-content
+    [title]="'No Categories Found'"
+    [message]="'You haven’t added any categories yet. Start by creating your first category.'"
+  >
+    <button class="btn add-btn" (click)="showAddCategoryModal = true">
+      <i class="pi pi-plus"></i>
+      Create Category
+    </button>
+  </app-no-content>
+}
+
+<!-- --------------- OVERLAY -------------- -->
+
+<!-- Update Category -->
+@if (showUpdateCategoryModal && selectedCategoryId()) {
+  <app-modal-overlay
+    [isOpen]="showUpdateCategoryModal"
+    width="600px"
+    (close)="showUpdateCategoryModal = false"
+  >
+    <app-update-category
+      [categoryId]="selectedCategoryId()"
+      (categoryUpdated)="onCategoryUpdated()"
+    >
+    </app-update-category>
+  </app-modal-overlay>
+}
+
+<!-- Add Category -->
+<app-modal-overlay
+  [isOpen]="showAddCategoryModal"
+  width="600px"
+  (close)="showAddCategoryModal = false"
+>
+  <app-add-category (categoryAdded)="onCategoryAdded()"></app-add-category>
+</app-modal-overlay>
+
+<!-- Delete Category -->
+<app-modal-overlay [isOpen]="showDeleteModal" width="400px" (close)="showDeleteModal = false">
+  <app-modal-delete
+    [visible]="showDeleteModal"
+    title="Delete Category"
+    iconColor="delete-icon"
+    message="Are you sure you want to delete this category?"
+    (onConfirm)="confirmDelete()"
+    (onClose)="closeDeleteModal()"
+  >
+  </app-modal-delete>
+</app-modal-overlay>

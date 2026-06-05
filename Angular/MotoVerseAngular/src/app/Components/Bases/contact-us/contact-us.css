@@ -1,0 +1,176 @@
+/* contact-page.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.contact-hero {
+  position: relative;
+  min-height: 60vh;
+  /* background: url("assets/bikes/banner.png") center/cover no-repeat; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 8%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.contact-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+}
+
+.subtitle {
+  color: var(--primary-color);
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.contact-hero-content h1 {
+  color: var(--white);
+  font-size: 72px;
+  line-height: 1.1;
+  margin-bottom: 25px;
+  font-family: var(--header-font);
+}
+
+.contact-hero-content p {
+  color: var(--text-light);
+  line-height: 1.8;
+  font-size: 18px;
+}
+
+.contact-section {
+  background: var(--background-color);
+  padding: 120px 8%;
+}
+
+.contact-container {
+  max-width: var(--max-width);
+  margin: auto;
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 50px;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.info-card {
+  background: var(--header-background-color);
+  border: 1px solid #1c1c1c;
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.info-card i {
+  width: 60px;
+  height: 60px;
+  background: rgba(240, 161, 58, 0.1);
+  color: var(--primary-color);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 24px;
+}
+
+.info-card h3 {
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.info-card p {
+  color: var(--text-light);
+}
+
+.contact-form {
+  background: var(--header-background-color);
+  border-radius: 30px;
+  padding: 40px;
+  border: 1px solid #1c1c1c;
+}
+
+.input-group {
+  margin-bottom: 25px;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 14px;
+  padding: 16px 18px;
+  color: var(--white);
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  border-color: var(--primary-color);
+}
+
+.submit-btn {
+  width: 100%;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--primary-color);
+  color: var(--background-color);
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+}
+
+.map-section iframe {
+  filter: grayscale(1) invert(0.92);
+}
+
+@media (max-width: 992px) {
+
+  .contact-container {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-hero-content h1 {
+    font-size: 52px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .contact-section {
+    padding: 80px 5%;
+  }
+
+  .contact-form {
+    padding: 25px;
+  }
+
+  .contact-hero-content h1 {
+    font-size: 40px;
+  }
+}

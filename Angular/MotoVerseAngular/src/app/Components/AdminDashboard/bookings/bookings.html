@@ -1,0 +1,142 @@
+<div class="admin-page">
+  <div class="filter-row">
+    <input placeholder="Search bookings..." [(ngModel)]="search" (ngModelChange)="applyFilters()" />
+    <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+      <option value="All">All Status</option>
+      <option>Pending</option>
+      <option>Approved</option>
+      <option>Active</option>
+      <option>Completed</option>
+      <option>Cancelled</option>
+      <option>Rejected</option>
+    </select>
+    <select [(ngModel)]="paymentFilter" (change)="applyFilters()">
+      <option value="All">All Payments</option>
+      <option>Pending</option>
+      <option>Paid</option>
+      <option>Failed</option>
+      <option>Refunded</option>
+    </select>
+    <app-ui-button label="Reset" icon="ri-refresh-line" type="reset" (clicked)="resetFilters()" />
+    <app-ui-button label="Apply" icon="ri-filter-3-line" type="submit" (clicked)="applyFilters()" />
+  </div>
+
+  <div class="table-card">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Booking ID</th>
+          <th>Customer</th>
+          <th>Motorcycle</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Days</th>
+          <th>Price</th>
+          <th>Pickup</th>
+          <th>Status</th>
+          <th>Payment</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          *ngFor="
+            let b of filtered() | slice: (page - 1) * pageSize : page * pageSize;
+            let i = index
+          "
+        >
+          <td>{{ i + 1 }}</td>
+          <td>{{ b.customerName }}</td>
+          <td>{{ b.motorcycle.name }}</td>
+          <td>{{ b.startDate | date: 'shortDate' }}</td>
+          <td>{{ b.endDate | date: 'shortDate' }}</td>
+          <td>{{ b.totalDays }}</td>
+          <td>${{ b.totalPrice.toFixed(2) }}</td>
+          <td>{{ b.pickupLocation }}</td>
+          <td>
+            <mv-status-badge
+              [label]="b.bookingStatus"
+              [variant]="b.bookingStatus.toLowerCase()"
+            ></mv-status-badge>
+          </td>
+          <td>
+            <mv-status-badge
+              [label]="b.paymentStatus"
+              [variant]="b.paymentStatus.toLowerCase()"
+            ></mv-status-badge>
+          </td>
+          <td>{{ b.createdAt | date: 'short' }}</td>
+          <td class="actions-col">
+            <!-- <div class="actions-menu">
+              <button class="menu-btn" (click)="toggleActions(b.id)">
+                <i class="ri-more-2-fill"></i>
+              </button>
+
+              <div class="menu-dropdown" *ngIf="openedMenuId === b.id">
+                <app-ui-button
+                  label="Approve"
+                  icon="ri-checkbox-circle-line"
+                  type="approve"
+                  (clicked)="approve(b)"
+                />
+
+                <app-ui-button
+                  label="Active"
+                  icon="ri-motorbike-line"
+                  type="mark-active"
+                  (clicked)="activate(b)"
+                />
+
+                <app-ui-button
+                  label="Complete"
+                  icon="ri-medal-line"
+                  type="complete"
+                  (clicked)="complete(b)"
+                />
+                <app-ui-button
+                  label="Cancel"
+                  icon="ri-close-circle-line"
+                  type="cancel"
+                  (clicked)="cancel(b)"
+                />
+                <app-ui-button
+                  label="Re Cancel"
+                  icon="ri-arrow-go-back-line"
+                  type="re-cancel"
+                  (clicked)="reCancel(b)"
+                />
+
+                <app-ui-button label="Pay" icon="ri-bank-card-line" type="pay" (clicked)="pay(b)" />
+
+                <app-ui-button
+                  label="Reject"
+                  icon="ri-forbid-2-line"
+                  type="reject"
+                  (clicked)="reject(b)"
+                />
+              </div>
+            </div> -->
+            <div class="actions-menu">
+              <button class="menu-btn" (click)="toggleActions(b.id)">
+                <i class="ri-more-2-fill"></i>
+              </button>
+
+              <app-booking-status
+                [booking]="b"
+                [openedMenuId]="openedMenuId()"
+                (toggleMenu)="toggleActions($event)"
+              >
+              </app-booking-status>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pager">
+      Showing {{ (page - 1) * pageSize + 1 }} - {{ endItem }} of {{ this.totalItems() }}
+    </div>
+  </div>
+</div>

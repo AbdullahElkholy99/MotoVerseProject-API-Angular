@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MotoVerse.API/MotoVerse.API.csproj" />
+  <Project Path="MotoVerse.Core/MotoVerse.Core.csproj" Id="f9cd16ef-9c63-4508-b402-6700f00ba068" />
+  <Project Path="MotoVerse.Entities/MotoVerse.Entities.csproj" Id="55c6c8fe-a4f4-4f7f-a72d-00e1a14f7b14" />
+  <Project Path="MotoVerse.Infrastructure/MotoVerse.Infrastructure.csproj" Id="04269a31-e599-4c54-9c6b-e59d49465690" />
+</Solution>

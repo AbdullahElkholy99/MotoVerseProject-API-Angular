@@ -1,0 +1,86 @@
+    <!-- FILTERS -->
+    <div class="filters-container">
+      <!-- Search -->
+      <div class="filter-item">
+        <label>Search</label>
+        <input
+          type="text"
+          placeholder="Search by brand or model"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+        />
+      </div>
+
+      <!-- Brand -->
+      <div class="filter-item">
+        <label>Brand</label>
+
+        <select [ngModel]="selectedBrand()" (ngModelChange)="selectedBrand.set($event)">
+          <option value="">All Brands</option>
+<!--
+          @for (brand of brandOptions(); track brand) {
+            <option [value]="brand">
+              {{ brand }}
+            </option>
+          } -->
+        </select>
+      </div>
+
+      <!-- Model -->
+      <div class="filter-item">
+        <label>Model</label>
+
+        <select [ngModel]="selectedModel()" (ngModelChange)="selectedModel.set($event)">
+          <option value="">All Models</option>
+
+          <!-- @for (model of modelOptions(); track model) {
+            <option [value]="model">
+              {{ model }}
+            </option>
+          } -->
+        </select>
+      </div>
+
+      <!-- Status -->
+      <div class="filter-item">
+        <label>Status</label>
+
+        <select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)">
+          <option value="">All Status</option>
+
+          @for (status of statusOptions; track status) {
+            @if (typeof status === 'number') {
+              <option [value]="status">
+                {{ statusMap[status] }}
+              </option>
+            }
+          }
+        </select>
+      </div>
+
+      <!-- Price -->
+      <div class="filter-item">
+        <label>Min Price</label>
+        <input type="number" [ngModel]="minPrice()" (ngModelChange)="minPrice.set($event)" />
+      </div>
+
+      <div class="filter-item">
+        <label>Max Price</label>
+        <input type="number" [ngModel]="maxPrice()" (ngModelChange)="maxPrice.set($event)" />
+      </div>
+
+      <!-- Actions -->
+      <div class="filter-buttons">
+        <app-ui-button
+          icon="ri-filter-off-line"
+          type="reset"
+          [iconOnly]="true"
+          (clicked)="clearFilters()" tooltip="Clear"
+        ></app-ui-button>
+        <app-ui-button
+          label="Apply"
+          icon="ri-submit-line"
+          type="submit" tooltip="Apply"
+        ></app-ui-button>
+      </div>
+    </div>

@@ -1,0 +1,81 @@
+
+
+
+<div class="motorcycle-card">
+  <!-- IMAGE -->
+  <div class="motorcycle-image-wrapper">
+    <img
+      class="motorcycle-image"
+      [src]="
+        motorcycle.imagePath
+          ? 'https://localhost:7081/images/motorcycle/' + motorcycle.imagePath
+          : 'assets/images/defualt.jpg'
+      "
+      [alt]="motorcycle.brand"
+      (error)="$any($event.target).src = 'assets/images/defualt.jpg'"
+    />
+
+    <span class="status-badge">
+      {{ statusMap[motorcycle.status] }}
+    </span>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="motorcycle-body">
+    <h2>{{ motorcycle.nameEn }}</h2>
+
+    <p class="motorcycle-description">
+      {{ motorcycle.description || 'No description available for this motorcycle.' }}
+    </p>
+
+    <!-- DETAILS -->
+    <div class="motorcycle-details">
+      <div class="detail-item">
+        <span>Model</span>
+        <strong>{{ motorcycle.model }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span>Brand</span>
+        <strong>{{ motorcycle.brand }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span>Price</span>
+        <strong>{{ motorcycle.pricePerDay }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span>Year</span>
+        <strong>{{ motorcycle.year }}</strong>
+      </div>
+
+      @if (motorcycle.color) {
+        <div class="detail-item">
+          <span>Color</span>
+          <strong>{{ motorcycle.color }}</strong>
+        </div>
+      }
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="motorcycle-actions">
+      <app-ui-button
+        label="Details"
+        icon="ri-eye-line"
+        type="details"
+        (click)="emitDetails(motorcycle.id)" tooltip="Details"
+      />
+    <app-ui-button
+      label="Rental"
+      icon="ri-motorbike-line"
+      type="primary"
+      tooltip="Rental Motorcycle"
+      (clicked)="rentalMotorcycle()"
+    />
+     <app-ui-button label="Buy" icon="ri-shopping-cart-line" type="addToCart"  tooltip ="Add To Cart" (clicked)="addToCart()"/>
+    </div>
+  </div>
+</div>
+
+

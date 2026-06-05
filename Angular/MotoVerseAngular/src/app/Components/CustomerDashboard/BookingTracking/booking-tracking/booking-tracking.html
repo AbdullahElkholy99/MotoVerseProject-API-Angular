@@ -1,0 +1,142 @@
+<div class="mv-bookings-page">
+  <header class="mv-header">
+    <div class="mv-header-left">
+      <h1>My Bookings</h1>
+      <p class="subtitle">Track and manage your motorcycle rentals</p>
+    </div>
+
+    <div class="mv-header-right">
+      <input
+        type="search"
+        placeholder="Search by booking, bike, location..."
+        [(ngModel)]="search"
+        (ngModelChange)="applyFilters()"
+        class="search"
+      />
+
+      <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+        <option value="All">All Statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Active">Active</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+
+      <input type="date" [(ngModel)]="fromDate" (change)="applyFilters()" />
+      <input type="date" [(ngModel)]="toDate" (change)="applyFilters()" />
+
+      <button class="btn ghost" (click)="resetFilters()">Reset</button>
+    </div>
+  </header>
+
+  <!-- booking-stats -->
+  <app-booking-stats [stats]="stats" />
+
+  <section class="list">
+    <div *ngIf="loading()" class="skeleton-grid">
+      <div class="skeleton-card" *ngFor="let n of [1, 2, 3]"></div>
+    </div>
+
+    <!-- if not booking -->
+    <div *ngIf="!loading() && filtered()?.length === 0" class="empty-state">
+      <img src="/public/assets/hero/hero1.jpg" alt="No bookings" />
+      <h3>You haven't rented a motorcycle yet.</h3>
+      <p>Browse our collection and book your next ride.</p>
+      <a class="btn primary" href="/home/motorcycle">Browse Motorcycles</a>
+    </div>
+
+    <div *ngIf="!loading()" class="cards">
+      <div class="booking-card" *ngFor="let b of filtered(); trackBy: trackById">
+        <div class="card-left">
+          <img
+            [src]="
+              b.motorcycle.imagePath ? b.motorcycle.imagePath : 'assets/hero/bike-placeholder.png'
+            "
+            alt="bike"
+          />
+        </div>
+
+        <div class="card-center">
+          <div class="bike-title">{{ b.motorcycle.name }}</div>
+          <div class="meta">
+            <div><strong>Brand:</strong> {{ b.motorcycle.brand }}</div>
+            <div>
+              <strong>Dates:</strong>
+              {{ b.startDate | date: 'mediumDate' }} -
+              {{ b.endDate | date: 'mediumDate' }}
+            </div>
+            <div><strong>Days:</strong> {{ b.totalDays }}</div>
+            <div><strong>Location:</strong> {{ b.pickupLocation }}</div>
+          </div>
+
+          <div class="timeline">
+            <div class="progress-track">
+              <div class="progress" [style.width.%]="progressPercent(b.bookingStatus)"></div>
+            </div>
+            <div class="steps">
+              <span class="step">Submitted</span>
+              <span class="step">Approved</span>
+              <span class="step">Payment</span>
+              <span class="step">Picked Up</span>
+              <span class="step">Completed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-right">
+          <div class="price">${{ b.totalPrice.toFixed(2) }}</div>
+          <div class="actions">
+            <button class="action-btn details-btn" title="View Details" (click)="openDetails(b)">
+              <i class="ri-eye-line"></i>
+            </button>
+
+            <button
+              *ngIf="b.bookingStatus === 'Pending'"
+              class="action-btn cancel-btn"
+              title="Cancel Booking"
+              (click)="toogleCancelModel(b.id)"
+            >
+              <i class="ri-close-circle-line"></i>
+            </button>
+
+            <button
+              *ngIf="b.bookingStatus !== 'Pending'"
+              class="action-btn download-btn"
+              title="Download Receipt"
+              (click)="downloadReceipt(b)"
+            >
+              <i class="ri-file-download-line"></i>
+            </button>
+
+            <button
+              *ngIf="b.bookingStatus === 'Active'"
+              class="action-btn support-btn"
+              title="Contact Support"
+              (click)="alert('Contacting support...')"
+            >
+              <i class="ri-customer-service-2-line"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Drawer -->
+  <app-booking-details [selected]="selected" [drawerOpen]="drawerOpen" />
+
+  <app-modal-delete (onConfirm)="confirmCancelationBooking()" (onClose)="toogleCancelModel('')" />
+
+</div>
+<app-modal-overlay [isOpen]="openCancelModal()" width="600px" (close)="toogleCancelModel('')">
+  <app-modal-delete
+    [visible]="openCancelModal()"
+    title="Delete Category"
+    message="Are you sure you want to delete this category?"
+    (onConfirm)="confirmCancelationBooking()"
+    (onClose)="toogleCancelModel('')"
+  >
+  </app-modal-delete>
+</app-modal-overlay>

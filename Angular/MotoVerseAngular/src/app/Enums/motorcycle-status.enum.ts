@@ -1,0 +1,5 @@
+export enum MotorcycleStatus {
+  Available = 1,
+  Rented = 2,
+  Maintenance = 3
+}

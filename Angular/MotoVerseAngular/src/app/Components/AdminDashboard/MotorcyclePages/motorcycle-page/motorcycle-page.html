@@ -1,0 +1,173 @@
+<section class="motorcycles-page">
+  <!-- HEADER -->
+  <div class="motorcycles-header">
+    <div class="header-content">
+      <h1>Motorcycles</h1>
+
+      <p>Manage your motorcycles inventory and track available bikes.</p>
+    </div>
+
+    <div class="header-actions">
+      <app-ui-button
+        label="Add Motorcycle"
+        icon="ri-add-line"
+        type="create"
+        (click)="showAddModal = true"
+      >
+      </app-ui-button>
+    </div>
+  </div>
+
+  <!-- MOTORCYCLES -->
+  @if (totalItems() > 0) {
+    <!-- FILTERS -->
+    <div class="filters-container">
+      <!-- Search -->
+      <div class="filter-item">
+        <label>Search</label>
+        <input
+          type="text"
+          placeholder="Search by brand or model"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+        />
+      </div>
+
+      <!-- Brand -->
+      <div class="filter-item">
+        <label>Brand</label>
+
+        <select [ngModel]="selectedBrand()" (ngModelChange)="selectedBrand.set($event)">
+          <option value="">All Brands</option>
+
+          @for (brand of brandOptions(); track brand) {
+            <option [value]="brand">
+              {{ brand }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <!-- Model -->
+      <div class="filter-item">
+        <label>Model</label>
+
+        <select [ngModel]="selectedModel()" (ngModelChange)="selectedModel.set($event)">
+          <option value="">All Models</option>
+
+          @for (model of modelOptions(); track model) {
+            <option [value]="model">
+              {{ model }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <!-- Status -->
+      <div class="filter-item">
+        <label>Status</label>
+
+        <select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)">
+          <option value="">All Status</option>
+
+          @for (status of statusOptions; track status) {
+            @if (typeof status === 'number') {
+              <option [value]="status">
+                {{ statusMap[status] }}
+              </option>
+            }
+          }
+        </select>
+      </div>
+
+      <!-- Price -->
+      <div class="filter-item">
+        <label>Min Price</label>
+        <input type="number" [ngModel]="minPrice()" (ngModelChange)="minPrice.set($event)" />
+      </div>
+
+      <div class="filter-item">
+        <label>Max Price</label>
+        <input type="number" [ngModel]="maxPrice()" (ngModelChange)="maxPrice.set($event)" />
+      </div>
+
+      <!-- Actions -->
+      <div class="filter-buttons">
+        <app-ui-button
+          icon="ri-filter-off-line"
+          type="reset"
+          [iconOnly]="true"
+          (clicked)="clearFilters()"
+        ></app-ui-button>
+        <app-ui-button
+          label="Apply"
+          icon="ri-submit-line"
+          type="submit"
+          (click)="loadMotorcycles()"
+        ></app-ui-button>
+      </div>
+    </div>
+
+    <!-- display all motorcycles -->
+    <div class="motorcycles-grid">
+      @for (motorcycle of motorcycles(); track motorcycle.id) {
+        <app-motorcycle-card
+          [motorcycle]="motorcycle"
+          (onDelete)="openDeleteModal($event)"
+          (onUpdate)="openUpdateModal($event)"
+          (onDetails)="openDetailsModal($event)"
+        />
+      }
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination-container">
+      <app-pagination
+        [totalItems]="totalItems()"
+        [itemsPerPage]="itemsPerPage"
+        [currentPage]="currentPage"
+        (pageChanged)="pageChanged($event)"
+      >
+      </app-pagination>
+    </div>
+  } @else {
+    <app-no-content></app-no-content>
+  }
+</section>
+
+<!-- --------------- OVERLAY -------------- -->
+
+<!-- Update motorcycle -->
+@if (showUpdateModal && selectedMotorcycleId()) {
+  <app-modal-overlay [isOpen]="showUpdateModal" width="600px" (close)="showUpdateModal = false">
+    <app-edit-motorcycle
+      [motorCycleId]="selectedMotorcycleId()"
+      (updatedSuccess)="refreshData($event)"
+    >
+    </app-edit-motorcycle>
+  </app-modal-overlay>
+}
+
+<!-- Add Category -->
+<app-modal-overlay [isOpen]="showAddModal" width="600px" (close)="showAddModal = false">
+  <app-add-motorcycle (addedSuccess)="refreshData($event)"> </app-add-motorcycle>
+</app-modal-overlay>
+
+<!-- Delete Category -->
+<app-modal-overlay [isOpen]="showDeleteModal" width="600px" (close)="showDeleteModal = false">
+  <app-modal-delete
+    [visible]="showDeleteModal"
+    title="Delete Motorcycle"
+    message="Are you sure you want to delete this category?"
+    (onConfirm)="confirmDelete()"
+    (onClose)="closeDeleteModal()"
+  />
+</app-modal-overlay>
+
+
+@if(showDetailsModal()){
+  <app-details-motorcycle
+    [selectedMotorcycleId]="selectedMotorcycleId()"
+    (close)="closeDetailsModal()"
+  />
+}

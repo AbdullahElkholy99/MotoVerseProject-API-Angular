@@ -1,0 +1,64 @@
+@if(showDetailsModal() && selectedUser()) {
+
+  <div class="customer-modal" (click)="$event.stopPropagation()">
+
+    <div class="customer-header">
+      <img
+        [src]="selectedUser()?.imagePath || 'assets/images/user-placeholder.png'"
+        [alt]="selectedUser()?.displayName">
+
+      <h2>{{ selectedUser()?.displayName }}</h2>
+
+      <span
+        class="status-badge"
+        [class.active]="selectedUser()?.isActive">
+
+        {{ selectedUser()?.isActive ? 'Active' : 'Inactive' }}
+      </span>
+
+    </div>
+
+    <div class="customer-grid">
+
+      <div class="info-card">
+        <label>Email</label>
+        <span>{{ selectedUser()?.email }}</span>
+      </div>
+
+      <div class="info-card">
+        <label>Phone</label>
+        <span>{{ selectedUser()?.phone }}</span>
+      </div>
+
+      <div class="info-card">
+        <label>Address</label>
+        <span>{{ selectedUser()?.address || 'N/A' }}</span>
+      </div>
+
+      <div class="info-card">
+        <label>Joined</label>
+        <span>
+          {{ selectedUser()?.createdAt }}
+        </span>
+      </div>
+
+    </div>
+
+    <div class="stats-section">
+
+      <div class="stat-card">
+        <h3>{{ selectedUser()?.orderCount }}</h3>
+        <p>Total Orders</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>{{ selectedUser()?.rentalCount }}</h3>
+        <p>Total Rentals</p>
+      </div>
+
+    </div>
+
+  </div>
+
+
+}

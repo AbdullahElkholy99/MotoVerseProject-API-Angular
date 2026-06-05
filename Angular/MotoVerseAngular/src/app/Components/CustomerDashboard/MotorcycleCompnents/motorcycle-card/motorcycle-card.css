@@ -1,0 +1,318 @@
+
+/* ====================== */
+/* CARD */
+
+.motorcycle-card {
+
+  background: var(--card-background);
+
+  border: 1px solid var(--border-color);
+
+  border-radius: 24px;
+
+  border: 2px solid rgb(175, 168, 168);
+
+  transition: 0.3s;
+
+  overflow: hidden;
+
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+   width: 100%;
+
+  min-width: 0;
+}
+
+
+.motorcycle-card:hover {
+  transform: translateY(-6px);
+}
+
+/* ====================== */
+/* IMAGE */
+
+.motorcycle-image-wrapper {
+
+  position: relative;
+
+  width: 100%;
+
+  height: 240px;
+
+  overflow: hidden;
+
+  flex-shrink: 0;
+}
+
+.motorcycle-image {
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+/* ====================== */
+
+.status-badge {
+
+  position: absolute;
+
+  top: 16px;
+  right: 16px;
+
+  background: var(--primary-color);
+
+  color: black;
+
+  padding: 8px 14px;
+
+  border-radius: 30px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+/* ====================== */
+/* BODY */
+
+.motorcycle-body {
+
+  padding: 24px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  flex: 1;
+}
+
+/* ====================== */
+
+.motorcycle-body h2 {
+
+  font-size: 24px;
+
+  margin-bottom: 12px;
+
+  min-height: 58px;
+}
+
+/* ====================== */
+
+.motorcycle-description {
+  color: var(--text-light);
+
+  line-height: 1.7;
+
+  margin-bottom: 24px;
+}
+
+/* ====================== */
+/* DETAILS */
+
+.motorcycle-details {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+
+  gap: 16px;
+
+  margin-bottom: 24px;
+
+  width: 100%;
+}
+
+.detail-item strong {
+  word-break: break-word;
+}
+.detail-item {
+  min-width: 0;
+  background: #1d1d1d;
+
+  border-radius: 14px;
+
+  padding: 14px;
+}
+
+.detail-item span {
+  display: block;
+
+  color: var(--text-light);
+
+  font-size: 13px;
+
+  margin-bottom: 6px;
+}
+
+.detail-item strong {
+  font-size: 16px;
+}
+
+/* ====================== */
+/* ACTIONS */
+
+.motorcycle-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  width: 100%;
+}
+
+/* ====================== */
+/* TABLET */
+/* ====================== */
+
+@media (max-width: 992px) {
+
+  .motorcycle-body {
+    padding: 20px;
+  }
+
+  .motorcycle-body h2 {
+    font-size: 22px;
+    min-height: auto;
+  }
+
+  .motorcycle-image-wrapper {
+    height: 220px;
+  }
+
+  .motorcycle-details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ====================== */
+/* MOBILE */
+/* ====================== */
+
+@media (max-width: 768px) {
+
+  .motorcycle-card {
+    border-radius: 20px;
+  }
+
+  .motorcycle-image-wrapper {
+    height: 200px;
+  }
+
+  .motorcycle-body {
+    padding: 18px;
+  }
+
+  .motorcycle-body h2 {
+    font-size: 20px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .motorcycle-description {
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+
+  .motorcycle-details {
+    gap: 12px;
+  }
+
+  .detail-item {
+    padding: 12px;
+  }
+
+  .detail-item strong {
+    font-size: 15px;
+  }
+
+  .motorcycle-actions {
+    flex-direction: column;
+  }
+
+  .motorcycle-actions button,
+  .motorcycle-actions a {
+    width: 100%;
+  }
+}
+
+/* ====================== */
+/* SMALL MOBILE */
+/* ====================== */
+
+@media (max-width: 480px) {
+
+  .motorcycle-card {
+    border-radius: 16px;
+  }
+
+  .motorcycle-image-wrapper {
+    height: 180px;
+  }
+
+  .motorcycle-body {
+    padding: 16px;
+  }
+
+  .motorcycle-body h2 {
+    font-size: 18px;
+  }
+
+  .motorcycle-description {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .motorcycle-details {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-item {
+    padding: 10px;
+  }
+
+  .detail-item span {
+    font-size: 12px;
+  }
+
+  .detail-item strong {
+    font-size: 14px;
+  }
+
+  .status-badge {
+    top: 10px;
+    right: 10px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ====================== */
+/* EXTRA SMALL */
+/* ====================== */
+
+@media (max-width: 360px) {
+
+  .motorcycle-image-wrapper {
+    height: 160px;
+  }
+
+  .motorcycle-body h2 {
+    font-size: 16px;
+  }
+
+  .motorcycle-description {
+    font-size: 12px;
+  }
+
+  .motorcycle-body {
+    padding: 14px;
+  }
+}

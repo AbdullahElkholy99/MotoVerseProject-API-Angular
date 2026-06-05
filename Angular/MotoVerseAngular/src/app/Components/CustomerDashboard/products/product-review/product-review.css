@@ -1,0 +1,373 @@
+/* ===========================
+   REVIEWS SECTION
+=========================== */
+
+.reviews-section {
+  margin: 3rem auto;
+  width: 90%;
+}
+
+.reviews-title {
+  color: var(--white);
+  margin-bottom: 1.5rem;
+  font-family: var(--header-font);
+}
+
+/* ===========================
+   REVIEWS GRID
+=========================== */
+
+.reviews-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 1.5rem;
+}
+
+.reviews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ===========================
+   REVIEW CARD
+=========================== */
+
+.review-card {
+  background: #141414;
+  border: 1px solid rgba(240, 161, 58, 0.15);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all .3s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-color);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-header h3 {
+  margin: 0;
+  color: var(--white);
+  font-size: 1.1rem;
+  font-family: var(--header-font);
+}
+
+.product-name {
+  color: var(--text-light);
+  font-size: .85rem;
+}
+
+/* ===========================
+   RATING
+=========================== */
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.rating i {
+  font-size: 1.2rem;
+}
+
+/* ===========================
+   REVIEW CONTENT
+=========================== */
+
+.review-content {
+  margin: 1rem 0;
+  line-height: 1.8;
+  color: var(--white);
+}
+
+/* ===========================
+   AI ANALYSIS
+=========================== */
+
+.ai-analysis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-bottom: 1rem;
+}
+
+.sentiment,
+.score,
+.fake {
+  padding: .5rem .9rem;
+  border-radius: 999px;
+  font-size: .85rem;
+  font-weight: 600;
+}
+
+/* Sentiment */
+
+.positive {
+  background: rgba(46, 125, 50, .15);
+  color: #6ddf77;
+}
+
+.negative {
+  background: rgba(198, 40, 40, .15);
+  color: #ff7b7b;
+}
+
+.neutral {
+  background: rgba(255, 255, 255, .08);
+  color: var(--white);
+}
+
+/* Score */
+
+.score {
+  background: rgba(240, 161, 58, .12);
+  color: var(--primary-color);
+}
+
+/* Fake / Verified */
+
+.fake {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+
+  background: rgba(46, 125, 50, .15);
+  color: #6ddf77;
+}
+
+.fake i {
+  font-size: 1rem;
+}
+
+.fake-review {
+  background: rgba(255, 152, 0, .15);
+  color: var(--primary-color);
+}
+
+/* ===========================
+   REASON BOX
+=========================== */
+
+.reason-box {
+  background: rgba(255, 152, 0, .08);
+  border-left: 4px solid var(--primary-color);
+
+  padding: 1rem;
+  border-radius: 10px;
+
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.reason-box strong {
+  color: var(--primary-color);
+}
+
+/* ===========================
+   AI REPLY
+=========================== */
+
+.reply-box {
+  background: rgba(240, 161, 58, .08);
+  border-left: 4px solid var(--primary-color);
+
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.reply-title {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+
+  color: var(--primary-color);
+  font-weight: 700;
+  margin-bottom: .75rem;
+}
+
+.reply-title i {
+  font-size: 1.2rem;
+}
+
+.reply-box p {
+  color: var(--white);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+
+.review-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem;
+
+  margin-top: 1rem;
+  padding-top: 1rem;
+
+  border-top: 1px solid rgba(255,255,255,.08);
+
+  color: var(--text-light);
+  font-size: .85rem;
+}
+
+/* ===========================
+   NO REVIEWS
+=========================== */
+
+.no-reviews {
+  background: #141414;
+  border: 1px solid rgba(240, 161, 58, .15);
+  border-radius: 16px;
+
+  padding: 2rem;
+  text-align: center;
+}
+
+.no-reviews i {
+  display: block;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.no-reviews p {
+  color: var(--text-light);
+  margin: 0;
+}
+
+/* ===========================
+   ADD REVIEW CARD
+=========================== */
+
+.add-review-card {
+  margin-top: 2rem;
+  background: #141414;
+  border: 1px solid rgba(240, 161, 58, .15);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.add-review-card h3 {
+  color: var(--white);
+  margin-bottom: 1.25rem;
+  font-family: var(--header-font);
+}
+
+/* ===========================
+   FORM
+=========================== */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: var(--background-color);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: .85rem 1rem;
+
+  color: var(--white);
+  font-size: .95rem;
+
+  outline: none;
+  transition: .3s;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary-color);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ===========================
+   BUTTON
+=========================== */
+
+.submit-review-btn {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: .9rem;
+
+  background: var(--primary-color);
+  color: #000;
+
+  font-weight: 700;
+  cursor: pointer;
+
+  transition: .3s;
+}
+
+.submit-review-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.submit-review-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   ERRORS
+=========================== */
+
+.error-message {
+  color: #ff6b6b;
+  font-size: .85rem;
+  margin-top: .25rem;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 768px) {
+
+  .reviews-list {
+    grid-template-columns: 1fr;
+  }
+
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .75rem;
+  }
+
+  .review-footer {
+    flex-direction: column;
+  }
+
+  .ai-analysis {
+    flex-direction: column;
+  }
+}

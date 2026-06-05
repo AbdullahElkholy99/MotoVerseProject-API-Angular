@@ -1,0 +1,6 @@
+:root{--primary-color:#f0a13a;--white:#fff;--text-light:#767268}
+.admin-page{padding:16px;color:var(--white)}
+.table-card{background:linear-gradient(180deg,#080808,#060606);padding:12px;border-radius:10px}
+.admin-table{width:100%;border-collapse:collapse}
+.admin-table th{color:var(--text-light);text-align:left;padding:10px;font-size:13px}
+.admin-table td{padding:10px;border-top:1px solid rgba(255,255,255,0.03)}

@@ -1,0 +1,134 @@
+<section class="reviews-section">
+  <h2 class="reviews-title">Reviews ({{ reviews.length }})</h2>
+
+  @if (reviews.length > 0) {
+    <div class="reviews-list">
+      @for (review of reviews; track review.id) {
+        <div class="review-card">
+          <!-- Header -->
+          <div class="review-header">
+            <div>
+              <h3>{{ review.customerName || 'Anonymous' }}</h3>
+              <span class="product-name">
+                {{ review.productName }}
+              </span>
+            </div>
+
+            <div class="rating">
+              <i class="ri-star-fill"></i>
+              {{ review.rating }}/5
+            </div>
+          </div>
+
+          <!-- Review -->
+          <div class="review-content">
+            {{ review.comment }}
+          </div>
+
+          <!-- AI Analysis -->
+          <div class="ai-analysis">
+            <div
+              class="sentiment"
+              [class.positive]="review.sentimentr === 'Positive'"
+              [class.negative]="review.sentimentr === 'Negative'"
+              [class.neutral]="review.sentimentr === 'Neutral'"
+            >
+              {{ review.sentimentr }}
+            </div>
+
+            <div class="score" *ngIf="review.sentimentScore">Score: {{ review.sentimentScore }}</div>
+
+            <div class="fake" [class.fake-review]="review.fake" *ngIf="review.fake">
+              <i [class]="review.fake ? 'ri-error-warning-line' : 'ri-shield-check-line'"> </i>
+              {{ review.fake ? 'Suspicious Review' : 'Verified Review' }}
+            </div>
+          </div>
+
+          <!-- Fake Reason -->
+          @if (review.fakeReason) {
+            <div class="reason-box">
+              <strong>Reason:</strong>
+              {{ review.fakeReason }}
+            </div>
+          }
+
+          <!-- AI Reply -->
+          @if (review.adminAutoReply) {
+            <div class="reply-box">
+              <div class="reply-title">
+                <i class="ri-robot-2-line"></i>
+                MotoVerse AI Reply
+              </div>
+              <p>
+                {{ review.adminAutoReply }}
+              </p>
+            </div>
+          }
+
+          <!-- Footer -->
+          <div class="review-footer">
+            <span>
+              Created:
+              {{ review.createdAt | date: 'medium' }}
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="no-reviews">
+      <i class="ri-chat-3-line"></i>
+      <p>No reviews available yet.</p>
+    </div>
+  }
+
+  <div class="add-review-card">
+    <h3>Add Your Review</h3>
+
+    <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+      <div class="form-group">
+        <label for="rating">Rating</label>
+
+        <select id="rating" formControlName="rating">
+          <option [value]="5">⭐⭐⭐⭐⭐ (5)</option>
+          <option [value]="4">⭐⭐⭐⭐ (4)</option>
+          <option [value]="3">⭐⭐⭐ (3)</option>
+          <option [value]="2">⭐⭐ (2)</option>
+          <option [value]="1">⭐ (1)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="comment">Comment</label>
+
+        <textarea
+          id="comment"
+          rows="5"
+          formControlName="comment"
+          placeholder="Share your experience with this product..."
+        >
+        </textarea>
+
+        @if (commentControl?.touched && commentControl?.invalid) {
+          <small class="error-message">
+            @if (commentControl?.errors?.['required']) {
+              Comment is required.
+            }
+
+            @if (commentControl?.errors?.['minlength']) {
+              Comment must be at least 5 characters.
+            }
+
+            @if (commentControl?.errors?.['maxlength']) {
+              Comment cannot exceed 500 characters.
+            }
+          </small>
+        }
+      </div>
+
+      <button type="submit" class="submit-review-btn" [disabled]="reviewForm.invalid">
+        Submit Review
+      </button>
+    </form>
+  </div>
+</section>

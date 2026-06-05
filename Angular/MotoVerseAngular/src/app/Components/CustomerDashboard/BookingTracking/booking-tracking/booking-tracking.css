@@ -1,0 +1,145 @@
+/* MotoVerse Booking Tracking - premium dark theme */
+:root {
+  --primary-color: #f0a13a;
+  --background-color: #0d0d0d;
+  --header-background-color: #080808;
+  --text-light: #767268;
+  --white: #ffffff;
+}
+
+.mv-bookings-page {
+  background: linear-gradient(180deg, var(--background-color), #070707);
+  color: var(--white);
+  min-height: 100vh;
+  padding: 24px;
+  box-sizing: border-box;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+
+}
+
+.mv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 33px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+
+.mv-header h1 { margin: 0; font-size: 22px; }
+.mv-header .subtitle { margin: 4px 0 0; color: var(--text-light); font-size: 13px }
+
+.mv-header-right { display:flex; gap:8px; align-items:center }
+.search { background:#111; border:1px solid #1a1a1a; color:var(--white); padding:8px 12px; border-radius:8px; min-width:220px }
+select, input[type=date] { background:#0f0f0f; border:1px solid #1a1a1a; color:var(--white); padding:8px 10px; border-radius:8px }
+.btn { background:transparent; color:var(--white); border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px; cursor:pointer }
+.btn.primary { background:var(--primary-color); color:#0b0b0b; border:none }
+.btn.ghost { background:transparent }
+.btn.outline { border:1px solid rgba(255,255,255,0.12) }
+
+.list .cards { display:grid; gap:12px }
+.booking-card { display:flex; gap:12px; background:linear-gradient(180deg, #0b0b0b, #070707); border-radius:12px; padding:12px; align-items:center; border:1px solid rgba(255,255,255,0.03) }
+.card-left img { width:140px; height:88px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,0.03) }
+.card-center { flex:1 }
+.bike-title { font-weight:600; font-size:16px }
+.meta { display:flex; gap:12px; color:var(--text-light); font-size:13px; margin-top:8px }
+.timeline { margin-top:12px }
+.progress-track { height:8px; background:rgba(255,255,255,0.04); border-radius:8px; overflow:hidden }
+.progress { height:100%; background: linear-gradient(90deg,var(--primary-color), #ffcf8a); transition: width 800ms cubic-bezier(.2,.9,.2,1) }
+.steps { display:flex; gap:8px; margin-top:8px; color:var(--text-light); font-size:12px }
+.step { background:transparent; padding:2px 6px; border-radius:6px }
+
+.card-right { width:220px; text-align:right }
+.price { font-weight:700; font-size:18px }
+.badges { display:flex; gap:8px; justify-content:flex-end; margin-top:8px }
+.badge { padding:6px 8px; border-radius:12px; font-size:12px }
+.badge.pending { background:rgba(240,161,58,0.08); color:var(--primary-color); border:1px solid rgba(240,161,58,0.14) }
+.badge.approved { background:rgba(52,199,89,0.08); color:#34c759; border:1px solid rgba(52,199,89,0.12) }
+.badge.active { background:rgba(88,86,214,0.08); color:#5856d6; border:1px solid rgba(88,86,214,0.12) }
+.badge.completed { background:rgba(0,122,255,0.08); color:#0a84ff; border:1px solid rgba(10,132,255,0.12) }
+.badge.cancelled { background:rgba(255,59,48,0.06); color:#ff3b30; border:1px solid rgba(255,59,48,0.12) }
+.actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.action-btn i {
+  font-size: 1.15rem;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+/* View Details */
+.details-btn {
+  background: rgba(240, 161, 58, 0.15);
+  color: var(--primary-color);
+}
+
+.details-btn:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
+/* Cancel */
+.cancel-btn {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.cancel-btn:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* Download */
+.download-btn {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+
+.download-btn:hover {
+  background: #22c55e;
+  color: #fff;
+}
+
+/* Support */
+.support-btn {
+  background: rgba(59, 130, 246, 0.12);
+  color: #3b82f6;
+}
+
+.support-btn:hover {
+  background: #3b82f6;
+  color: #fff;
+}

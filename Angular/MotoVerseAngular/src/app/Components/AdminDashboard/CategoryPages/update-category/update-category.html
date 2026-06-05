@@ -1,0 +1,82 @@
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+  <!-- ─── NAME ─── -->
+  <div class="field">
+    <label>Name</label>
+    <!-- formControlName connects to the FormControl named 'name' -->
+    <input type="text" formControlName="name" />
+
+    <div
+      *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched"
+      class="error"
+    >
+      <p *ngIf="categoryForm.get('name')?.errors?.['required']">Name is required.</p>
+      <p *ngIf="categoryForm.get('name')?.errors?.['minlength']">
+        Minimum {{ categoryForm.get('name')?.errors?.['minlength'].requiredLength }} characters.
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── Description ─── -->
+  <div class="field">
+    <label>Description</label>
+    <input type="text" formControlName="description" />
+
+    <div
+      *ngIf="categoryForm.get('description')?.invalid && categoryForm.get('description')?.touched"
+    >
+      <p *ngIf="categoryForm.get('description')?.errors?.['required']" class="error">
+        Description is required.
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── Image File ─── -->
+  <div class="imageFile">
+
+    <!--------------------- image file -->
+    <label>Image File</label>
+    <label class="file-upload" *ngIf="imagePreview() == null && currentCategory?.imagePath == null">
+      <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+      <div class="upload-content">
+        <i class="pi pi-cloud-upload upload-icon"></i>
+        <span> Upload Category Image </span>
+        <small> PNG, JPG, WEBP </small>
+      </div>
+    </label>
+
+    <!-- ------------------ imagePreview -->
+    <div *ngIf="imagePreview() || currentCategory?.imagePath" class="preview-container">
+      <label class="preview-wrapper">
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+
+        <img
+          [src]="
+            imagePreview() ||
+            (currentCategory?.imagePath
+              ? 'https://localhost:7081/images/category/' + currentCategory?.imagePath
+              : 'https://placehold.co/600x400')
+          "
+          alt="Preview"
+          class="preview-image"
+        />
+
+        <div class="change-overlay">Change Image</div>
+      </label>
+    </div>
+    <div
+      *ngIf="categoryForm.get('imageFile')?.invalid && categoryForm.get('imageFile')?.touched"
+      class="error"
+    >
+      <p *ngIf="categoryForm.get('imageFile')?.errors?.['required']">Image file is required.</p>
+    </div>
+  </div>
+
+  <!-- ─── SUBMIT ─── -->
+  <app-ui-button style="margin-top: 30px;"
+    label="Update"
+    icon="ri-pencil-line"
+    type="edit"
+    [disabled]="categoryForm.invalid"
+  ></app-ui-button>
+
+</form>

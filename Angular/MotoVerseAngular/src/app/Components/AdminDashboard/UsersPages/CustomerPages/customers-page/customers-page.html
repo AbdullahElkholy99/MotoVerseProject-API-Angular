@@ -1,0 +1,122 @@
+@if (customers().length > 0) {
+  <section class="page-header">
+    <div>
+      <h2>Customers</h2>
+      <p>Review customer profiles, order history, and engagement status.</p>
+    </div>
+  </section>
+
+  <article class="customers-card">
+    <div class="customer-table__header">
+    </div>
+
+    <div class="customer-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Orders</th>
+            <th>Rentals</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (customer of customers(); track customer.id;) {
+            <tr>
+              <td class="customer-cell">
+                <img [src]="customer.imagePath ? customer.imagePath : `/assets/images/users/defualt.png`" [alt]="customer.displayName" />
+                <div>
+                  <strong>{{ customer.displayName }}</strong>
+                </div>
+              </td>
+              <td>{{ customer.email }}</td>
+              <td>{{ customer.phone }}</td>
+              <td>{{ customer.orderCount }}</td>
+              <td>{{ customer.rentalCount }}</td>
+              <td>
+                <span class="pill pill--{{ customer.isActive ? 'success' : 'inactive' }}">{{
+                  customer.isActive ? 'Active' : 'Inactive'
+                }}</span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn-action btn-view" (click)="viewCustomer(customer.id)">
+                    <i class="ri-eye-line"></i>
+                  </button>
+
+                  <!-- <button class="btn-action btn-edit" (click)="editCustomer(customer.id)">
+                    <i class="ri-edit-line"></i>
+                  </button> -->
+
+                <button
+                  class="btn-action"
+                  [class.btn-delete]="customer.isActive"
+                  [class.btn-restore]="!customer.isActive"
+                  (click)="showDeleteModal(customer)">
+
+                  <i
+                    [class]="
+                      customer.isActive
+                        ? 'ri-delete-bin-line'
+                        : 'ri-refresh-line'
+                    ">
+                  </i>
+                </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <app-pagination
+      [totalItems]="totalItems()"
+      [currentPage]="currentPage()"
+      [itemsPerPage]="pageSize()"
+      (pageChanged)="onPageChange($event)"
+    />
+  </article>
+} @else {
+  <app-no-content
+    title="No Customer Avilable"
+    message="There is Customers to display at the moment. Please check back later."
+  />
+}
+
+@if(selectedCustomerId() !== null)
+{
+  <app-modal-overlay [isOpen]="showDetailsModal()"
+    width="900px"
+    (close)="closeModal()">
+    <app-customer-details [customerId] ="selectedCustomerId() ?? ''"/>
+  </app-modal-overlay>
+}
+
+
+<app-modal-overlay
+  [isOpen]="toggleDeleteModal()"
+  width="400px"
+  (close)="closeDeleteModal()">
+
+  <app-modal-delete
+    [visible]="toggleDeleteModal()"
+    [icon]="isActive ? '🗑' : '🔄'"
+    [labelBtn] = "isActive? 'Deactivate': 'Activate'"
+    [labelColor] = "isActive? 'confirm-btn': 'activate-btn'"
+    [iconColor]="isActive ? 'delete-icon' : 'active-icon'"
+    [title]="isActive? 'Deactivate Customer': 'Activate Customer'"
+    [message]="isActive
+      ? 'Are you sure you want to deactivate this customer? The customer will no longer be able to use the system.'
+      : 'Are you sure you want to activate this customer again?'"
+
+    (onConfirm)="confirmDelete()"
+    (onClose)="closeDeleteModal()">
+
+  </app-modal-delete>
+
+</app-modal-overlay>
+

@@ -1,0 +1,47 @@
+<section
+  class="recommendations-section"
+  *ngIf="recommendations()!.length > 0">
+
+  <h3 class="recommendations-title">
+    <i class="ri-roadster-line"></i>
+    Recommended For You
+  </h3>
+
+  <div class="recommendations-grid">
+
+    @for (product of recommendations(); track product.id) {
+
+      <div class="recommendation-card">
+
+        <img
+          [src]="
+            product.imagePath
+              ? 'https://localhost:7081/images/product/' + product.imagePath
+              : 'assets/products/default.jpg'
+          "
+          [alt]="product.name">
+
+        <div class="recommendation-content">
+
+          <h4>{{ product.name }}</h4>
+
+          <span class="recommendation-price">
+            ${{ product.price }}
+          </span>
+
+          <button
+            class="recommendation-btn"
+            ta
+            (click)="showDetails(product.id)">
+            View Product
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+
+</section>

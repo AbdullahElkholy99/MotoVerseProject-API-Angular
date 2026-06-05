@@ -1,0 +1,8 @@
+﻿using MotoVerse.Entities.Models.Motorcycles;
+
+namespace MotoVerse.Infrastructure.IRepository.Motorcycles;
+
+public interface IPaymentRepository
+    : IGenericRepository<Payment>
+{
+}

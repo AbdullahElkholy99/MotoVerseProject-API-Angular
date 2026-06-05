@@ -1,0 +1,73 @@
+/* ====================== */
+/* FILTERS */
+
+.filters-container {
+  background: var(--card-background);
+
+  border: 1px solid var(--border-color);
+
+  border-radius: 20px;
+
+  padding: 24px;
+
+  margin-bottom: 32px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-right: 2px solid white;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-item label {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.filter-item input,
+.filter-item select {
+  height: 52px;
+
+  border-radius: 14px;
+
+  border: 1px solid var(--border-color);
+
+  background: #1b1b1b;
+
+  color: var(--white);
+
+  padding: 0 16px;
+
+  font-size: 15px;
+}
+
+.filter-item input:focus,
+.filter-item select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.filter-buttons {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.btn-filter {
+  height: 52px;
+
+  border: none;
+  border-radius: 14px;
+
+  padding: 0 22px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+

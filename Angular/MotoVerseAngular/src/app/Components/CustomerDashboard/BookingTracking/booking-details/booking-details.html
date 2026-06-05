@@ -1,0 +1,102 @@
+<aside class="details-drawer" [class.open]="drawerOpen()">
+  @if (selected() !== null) {
+    <div class="drawer-inner" *ngIf="selected()">
+      <button class="close" (click)="closeDetails()">×</button>
+      <div class="drawer-top">
+        <img [src]="selected()?.motorcycle?.imagePath" alt="motorcycle" />
+        <div class="info">
+          <h2>{{ selected()!.motorcycle.brand }} {{ selected()!.motorcycle.name }}</h2>
+          <div class="sub">
+            {{ selected()!.motorcycle.model }} • {{ selected()!.motorcycle.model }}
+          </div>
+          <div class="price">${{ selected()!.totalPrice.toFixed(2) }}</div>
+        </div>
+      </div>
+
+      <div class="drawer-section">
+        <h4>Booking Details</h4>
+        <div class="grid">
+          <div>
+            <strong>Start</strong>
+            <div>{{ selected()!.startDate | date: 'medium' }}</div>
+          </div>
+          <div>
+            <strong>End</strong>
+            <div>{{ selected()!.endDate | date: 'medium' }}</div>
+          </div>
+          <div>
+            <strong>Pickup</strong>
+            <div>{{ selected()!.pickupLocation }}</div>
+          </div>
+          <div>
+            <strong>Total Days</strong>
+            <div>{{ selected()!.totalDays! }}</div>
+          </div>
+          <div>
+            <strong>Total Price</strong>
+            <div>${{ selected()!.totalPrice!.toFixed(2) }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-section">
+        <h4>Payment</h4>
+        <div *ngIf="selected()!.payment; else paypending">
+          <div class="grid">
+            <div>
+              <strong>Amount Paid</strong>
+              <div>${{ selected()!.payment!.amount }}</div>
+            </div>
+            <div>
+              <strong>Method</strong>
+              <div>{{ selected()!.payment!.method }}</div>
+            </div>
+            <div>
+              <strong>Provider</strong>
+              <div>{{ selected()!.payment!.provider }}</div>
+            </div>
+            <div>
+              <strong>Transaction</strong>
+              <div>{{ selected()!.payment!.transactionId }}</div>
+            </div>
+            <div>
+              <strong>Date</strong>
+              <div>{{ selected()!.payment!.paidAt | date: 'medium' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #paypending>
+          <div class="muted">Payment pending or not available.</div>
+        </ng-template>
+      </div>
+
+      <div class="drawer-section">
+        <h4>Timeline</h4>
+        <div class="timeline-list">
+          <!-- <div class="timeline-item" *ngFor="let t of selected.timeline"> -->
+          <div class="timeline-item" *ngIf="selected()">
+            <div class="dot"></div>
+            <div class="entry">
+              <div class="when">
+                From {{ selected()!.startDate | date: 'short' }} To
+                {{ selected()!.endDate | date: 'short' }}
+              </div>
+              <div class="what">Booking Status : {{ selected()!.bookingStatus }}</div>
+              <div class="what">Payment Status : {{ selected()!.paymentStatus }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-actions">
+        <button class="action-btn download-btn" (click)="downloadReceipt(selected()!)">
+          <i class="ri-file-download-line"></i>
+        </button>
+        <button class="action-btn cancel-btn" (click)="closeDetails()">
+          <i class="ri-close-circle-line"></i>
+        </button>
+      </div>
+    </div>
+  }
+</aside>

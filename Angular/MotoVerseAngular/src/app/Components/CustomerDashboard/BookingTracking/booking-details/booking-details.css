@@ -1,0 +1,299 @@
+
+
+.action-btn {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.action-btn i {
+  font-size: 1.15rem;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}/* Download */
+.download-btn {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+
+.download-btn:hover {
+  background: #22c55e;
+  color: #fff;
+}
+
+/* Cancel */
+.cancel-btn {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.cancel-btn:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+
+/* ========================= */
+/* DETAILS DRAWER */
+/* ========================= */
+
+.details-drawer {
+  position: fixed;
+  top: 0;
+  right: -500px;
+
+  width: 480px;
+  max-width: 100vw;
+  height: 100vh;
+
+  z-index: 1000;
+
+  transition: right 0.35s ease;
+}
+
+.details-drawer.open {
+  right: 0;
+}
+
+.drawer-inner {
+  height: 100%;
+
+  background: #111;
+
+  padding: 24px;
+
+  overflow-y: auto;
+
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+
+  border-left: 1px solid rgba(255,255,255,.05);
+}
+
+/* Close Button */
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+
+  width: 40px;
+  height: 40px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255,255,255,.08);
+  color: white;
+
+  cursor: pointer;
+
+  font-size: 24px;
+
+  transition: .3s;
+}
+
+.close:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
+/* ========================= */
+/* TOP SECTION */
+/* ========================= */
+
+.drawer-top {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+
+  margin-top: 30px;
+}
+
+.drawer-top img {
+  width: 140px;
+  height: 100px;
+
+  object-fit: cover;
+
+  border-radius: 14px;
+}
+
+.drawer-top .info {
+  flex: 1;
+}
+
+.drawer-top h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.drawer-top .sub {
+  color: #aaa;
+  margin-top: 4px;
+}
+
+.drawer-top .price {
+  margin-top: 10px;
+
+  font-size: 1.4rem;
+  font-weight: bold;
+
+  color: var(--primary-color);
+}
+
+/* ========================= */
+/* SECTION */
+/* ========================= */
+
+.drawer-section {
+  margin-top: 24px;
+}
+
+.drawer-section h4 {
+  margin-bottom: 12px;
+
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+/* ========================= */
+/* GRID */
+/* ========================= */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 12px;
+}
+
+.grid > div {
+  background: rgba(255,255,255,.04);
+
+  padding: 12px;
+
+  border-radius: 12px;
+}
+
+.grid strong {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #bbb;
+  font-size: .85rem;
+}
+
+/* ========================= */
+/* TIMELINE */
+/* ========================= */
+
+.timeline-list {
+  position: relative;
+
+  margin-top: 10px;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.timeline-item .dot {
+  width: 12px;
+  height: 12px;
+
+  border-radius: 50%;
+
+  background: var(--primary-color);
+
+  margin-top: 5px;
+
+  flex-shrink: 0;
+}
+
+.timeline-item .when {
+  font-size: .8rem;
+  color: #999;
+}
+
+.timeline-item .what {
+  font-weight: 500;
+}
+
+/* ========================= */
+/* DRAWER ACTIONS */
+/* ========================= */
+
+.drawer-actions {
+  margin-top: 24px;
+
+  display: flex;
+  gap: 10px;
+}
+
+.drawer-actions .btn {
+  flex: 1;
+}
+
+/* ========================= */
+/* MUTED */
+/* ========================= */
+
+.muted {
+  color: #888;
+  font-style: italic;
+}
+
+/* ========================= */
+/* MOBILE */
+/* ========================= */
+
+@media (max-width: 768px) {
+
+  .details-drawer {
+    width: 100%;
+    right: -100%;
+  }
+
+  .details-drawer.open {
+    right: 0;
+  }
+
+  .drawer-top {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .drawer-top img {
+    width: 100%;
+    height: 220px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .drawer-actions {
+    flex-direction: column;
+  }
+}

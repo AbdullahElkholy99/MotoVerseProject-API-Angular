@@ -1,0 +1,129 @@
+<div class="navbar-container">
+
+  <div class="navbar-left">
+
+    <div class="navbar-logo">
+      <a routerLink="/home">STEED</a>
+    </div>
+
+    <div class="navbar-menu-btn" (click)="toggleMenu()">
+      <i [class]="isMenuOpen() ? 'ri-close-line' : 'ri-menu-line'"></i>
+    </div>
+
+  </div>
+
+  <div class="navbar-links" [class.open]="isMenuOpen()">
+
+    <div class="navbar-link-item">
+      <a
+        routerLink="/home"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+        Home
+      </a>
+    </div>
+
+    <div class="navbar-link-item">
+      <a routerLink="/home/aboutUs" routerLinkActive="active">
+        About Us
+      </a>
+    </div>
+
+    <div class="navbar-link-item">
+      <a routerLink="/home/contact" routerLinkActive="active">
+        Contact
+      </a>
+    </div>
+
+    <div class="navbar-link-item">
+      <a routerLink="/home/motorcycle" routerLinkActive="active">
+        Motorcycle
+      </a>
+    </div>
+
+    <div class="navbar-link-item">
+      <a routerLink="/home/products" routerLinkActive="active">
+        Products
+      </a>
+    </div>
+
+    <div class="navbar-link-item">
+      <a routerLink="/home/my-bookings" routerLinkActive="active">
+        My Bookings
+      </a>
+    </div>
+
+  </div>
+
+ <div class="navbar-actions">
+
+  <!-- User Menu -->
+  <div class="user-menu">
+    <button class="action-btn" (click)="toggleProfileMenu()">
+      <i class="ri-user-3-line"></i>
+    </button>
+
+    @if(showProfileMenu()){
+    <div class="profile-dropdown">
+
+      <!-- If User Logged In -->
+      @if(isLoggedIn()){
+      <div>
+        <a routerLink="/profile" (click)="closeProfileMenu()">
+          <i class="ri-user-line"></i>
+          <span>Profile</span>
+        </a>
+
+        <a routerLink="/settings" (click)="closeProfileMenu()">
+          <i class="ri-settings-3-line"></i>
+          <span>Settings</span>
+        </a>
+
+        <button (click)="logout()">
+          <i class="ri-logout-box-r-line"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+      }
+
+      <!-- If User Not Logged In -->
+      @else {
+      <div>
+        <a routerLink="/login"  >
+          <i class="ri-login-box-line"></i>
+          <span>Login</span>
+        </a>
+
+        <a routerLink="/register"  >
+          <i class="ri-user-add-line"></i>
+          <span>Register</span>
+        </a>
+      </div>
+      }
+
+    </div>
+    }
+
+  </div>
+
+  <button class="action-btn" (click)="toggleCart()">
+    <i class="ri-shopping-bag-line"></i>
+    <span class="cart-badge">0</span>
+  </button>
+
+  <button class="action-btn">
+    <i class="ri-search-line"></i>
+  </button>
+
+</div>
+
+</div>
+
+
+
+@if(showCart()){
+<app-shopping-cart
+  [showCart]="showCart()"
+  (closeCart)="closeCart()">
+</app-shopping-cart>
+}

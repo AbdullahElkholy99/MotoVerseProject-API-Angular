@@ -1,0 +1,52 @@
+<div class="menu-dropdown" *ngIf="openedMenuId === booking.id">
+
+  <app-ui-button
+    label="Approve"
+    icon="ri-checkbox-circle-line"
+    type="approve"
+    (clicked)="approve(booking)"
+  />
+
+  <app-ui-button
+    label="Active"
+    icon="ri-motorbike-line"
+    type="mark-active"
+    (clicked)="activate(booking)"
+  />
+
+  <app-ui-button
+    label="Complete"
+    icon="ri-medal-line"
+    type="complete"
+    (clicked)="complete(booking)"
+  />
+
+  <app-ui-button
+    label="Cancel"
+    icon="ri-close-circle-line"
+    type="cancel"
+    (clicked)="cancel(booking)"
+  />
+
+  <app-ui-button
+    label="Re Cancel"
+    icon="ri-arrow-go-back-line"
+    type="re-cancel"
+    (clicked)="reCancel(booking)"
+  />
+
+  <app-ui-button
+    label="Pay"
+    icon="ri-bank-card-line"
+    type="pay"
+    (clicked)="pay(booking)"
+  />
+
+  <app-ui-button
+    label="Reject"
+    icon="ri-forbid-2-line"
+    type="reject"
+    (clicked)="reject(booking)"
+  />
+
+</div>

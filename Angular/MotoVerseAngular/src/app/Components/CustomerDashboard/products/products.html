@@ -1,0 +1,112 @@
+<section class="shop">
+  @if (totalItems()) {
+    <!-- Category Tabs -->
+    <div class="filter_section">
+      <div class="filter-tabs">
+        <button
+          class="tab-btn"
+          [class.active]="selectedCategory() === 'All'"
+          (click)="resetFilter()"
+        >
+          All
+        </button>
+        @for (cat of categories(); track cat.id) {
+          <button
+            class="tab-btn"
+            (click)="selectCategory(cat)"
+            [class.active]="selectedCategory() === cat.name"
+          >
+            {{ cat.name }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Products -->
+    <div class="section__container shop__container">
+      @for (product of products(); track product.id) {
+        <div class="shop__card">
+          <!-- Header -->
+          <div class="shop__card-header">
+            <div class="shop__card-header-content">
+              <p>{{ product.categoryName }}</p>
+              <h4>{{ product.name | title: 20 }}</h4>
+            </div>
+            <div class="shop__card-header-content">
+              <span
+                class="badge stock"
+                [class.inStock]="product.quantity > 0"
+                [class.outStock]="product.quantity === 0"
+              >
+                {{ product.quantity > 0 ? 'In Stock: ' + product.quantity : 'Out Of Stock' }}
+              </span>
+              <span
+                class="price"
+                [class.expensive]="product.price > 1000"
+                [class.cheap]="product.price <= 1000"
+              >
+                ${{ product.price }}
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <!-- Product Image -->
+            <img
+              [src]="
+                product.imagePath
+                  ? 'https://localhost:7081/images/product/' + product.imagePath
+                  : 'assets/products/default.jpg'
+              "
+              [alt]="product.name"
+            />
+          </div>
+
+          <!-- Content -->
+          <div>
+            <p>{{ product.description }}</p>
+
+            <div class="rating">
+              <h4 class="rating">{{ product.rating | star }}</h4>
+              <span class="badge">{{ ProductStatus[product.status] }}</span>
+            </div>
+
+            <button
+              class="add-cart-btn"
+              (click)="addToCart(product)"
+              [disabled]="product.quantity === 0 || loadingProductId() === product.id"
+            >
+              @if (loadingProductId() === product.id) {
+                <i class="ri-loader-4-line spinner"></i>
+                Adding...
+              } @else {
+                <i class="ri-shopping-cart-line"></i>
+                Add To Cart
+              }
+            </button>
+
+            <button
+              class="details-btn"
+              (click)="showDetails(product.id)"
+              [disabled]="loadingProductId() === product.id"
+            >
+              @if (loadingProductId() === product.id) {
+                <i class="ri-loader-4-line spinner"></i>
+                <span>Loading...</span>
+              } @else {
+                <i class="ri-information-line"></i>
+                <span>Details</span>
+              }
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+  } @else {
+    <app-no-content
+      title="No Products Available"
+      message="There is no Products to display at the moment. Please check back later."
+    ></app-no-content>
+  }
+</section>

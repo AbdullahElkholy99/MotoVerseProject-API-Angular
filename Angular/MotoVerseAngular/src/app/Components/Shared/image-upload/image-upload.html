@@ -1,0 +1,34 @@
+<div class="imageFile">
+  <label style="color: white;">{{ label }}</label>
+
+  <!-- Upload Area -->
+
+  <label class="file-upload" *ngIf="!imagePreview()">
+    <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+
+    <div class="upload-content">
+      <i class="pi pi-cloud-upload upload-icon"></i>
+
+      <span> Upload Image </span>
+
+      <small> PNG, JPG, WEBP </small>
+    </div>
+  </label>
+
+  <!-- Preview -->
+  <div *ngIf="imagePreview()" class="preview-container">
+    <label class="preview-wrapper">
+      <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+
+      <img [src]="imagePreview()!" alt="Preview" class="preview-image" />
+
+      <div class="change-overlay">Change Image</div>
+    </label>
+  </div>
+
+  <!-- Error -->
+
+  <div *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+</div>

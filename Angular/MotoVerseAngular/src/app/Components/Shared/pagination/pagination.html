@@ -1,0 +1,15 @@
+<div class="pagination-wrapper">
+<h1></h1>
+  <pagination
+    [boundaryLinks]="true"
+    [totalItems]="totalItems"
+    [itemsPerPage]="itemsPerPage"
+    [(ngModel)]="currentPage"
+    (pageChanged)="onPageChanged($event)"
+    previousText="‹"
+    nextText="›"
+    firstText="«"
+    lastText="»">
+  </pagination>
+
+</div>

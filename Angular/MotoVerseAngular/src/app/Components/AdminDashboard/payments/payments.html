@@ -1,0 +1,23 @@
+<div class="admin-page">
+  <h3>Payments</h3>
+  <div class="table-card">
+    <table class="admin-table">
+      <thead><tr><th>Payment ID</th><th>Booking</th><th>Customer</th><th>Amount</th><th>Method</th><th>Provider</th><th>Paid At</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let p of payments">
+          <td>{{ p.id }}</td>
+          <td>{{ p.bookingId }}</td>
+          <td>{{ p.customer }}</td>
+          <td>${{ p.amount.toFixed(2) }}</td>
+          <td>{{ p.method }}</td>
+          <td>{{ p.provider }}</td>
+          <td>{{ p.paidAt | date:'short' }}</td>
+          <td>
+            <button class="btn" (click)="verify(p)">Verify</button>
+            <button class="btn outline" (click)="refund(p)">Refund</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

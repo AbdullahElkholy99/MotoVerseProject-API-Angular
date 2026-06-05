@@ -1,0 +1,26 @@
+:host {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color);
+}
+/* main content */
+router-outlet + * {
+  flex: 1;
+}
+
+/* spacing because navbar is fixed */
+app-navbar {
+  position: relative;
+  z-index: 1000;
+}
+
+main,
+.page-content {
+  padding-top: 100px;
+}
+
+/* footer always bottom */
+app-footer {
+  margin-top: auto;
+}

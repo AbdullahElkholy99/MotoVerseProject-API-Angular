@@ -1,0 +1,137 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-header h2 {
+  color: #f8fafc;
+}
+
+.page-header p,
+.header-pill {
+  color: #94a3b8;
+}
+
+.header-pill {
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  background: rgba(16, 185, 129, 0.14);
+}
+
+.analytics-grid {
+  display: grid;
+  gap: 1.75rem;
+  grid-template-columns: 1.5fr 1fr;
+}
+
+.chart-card,
+.stats-card,
+.traffic-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(18px);
+}
+
+.chart-card__header,
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.chart-card__header h3 {
+  color: #f8fafc;
+}
+
+.chart-card__header span,
+.chart-labels span {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.line-chart {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: end;
+  min-height: 14rem;
+  padding: 1rem 0;
+}
+
+.line-chart__point {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.line-chart__point span {
+  width: 0.75rem;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.95), rgba(59, 130, 246, 0.2));
+  border-radius: 999px;
+  display: block;
+}
+
+.stats-card h3,
+.traffic-card h3 {
+  color: #f8fafc;
+  margin-bottom: 1rem;
+}
+
+.stats-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.stats-list div {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.stats-list small {
+  color: #94a3b8;
+}
+
+.stats-list strong {
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.traffic-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.traffic-item {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.traffic-item span {
+  color: #f8fafc;
+  display: block;
+}
+
+.traffic-item strong {
+  color: #94a3b8;
+}
+
+.traffic-bar {
+  height: 0.75rem;
+  border-radius: 999px;
+}
+
+@media (max-width: 960px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+}

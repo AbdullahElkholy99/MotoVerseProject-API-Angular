@@ -1,0 +1,46 @@
+<section class="page-header">
+  <div>
+    <h2>Orders Management</h2>
+    <p>Track purchases, payment progress and shipping details for your store.</p>
+  </div>
+  <div class="header-pill">Latest updates</div>
+</section>
+
+<div class="orders-grid">
+  <app-metric-card icon="ri-shopping-cart-2-line" label="Total Orders" [value]="data.totalOrders()" change="+8.2%" accent="primary"></app-metric-card>
+  <app-metric-card icon="ri-money-dollar-circle-line" label="Revenue" [value]="'$' + (data.totalRevenue() | number:'1.0-0')" change="+11.6%" accent="success"></app-metric-card>
+  <app-metric-card icon="ri-user-3-line" label="Active Customers" [value]="data.totalCustomers()" change="+4.9%" accent="warning"></app-metric-card>
+</div>
+
+<article class="orders-table-card">
+  <div class="table-card__header">
+    <h3>Order queue</h3>
+    <a routerLink="/orders">Refresh</a>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Payment</th>
+          <th>Delivery</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of data.orders()">
+          <td>{{ order.id }}</td>
+          <td>{{ order.customer }}</td>
+          <td>{{ order.date }}</td>
+          <td>${{ order.totalPrice }}</td>
+          <td><span class="pill pill--{{ order.paymentStatus === 'Paid' ? 'success' : order.paymentStatus === 'Pending' ? 'warning' : 'error' }}">{{ order.paymentStatus }}</span></td>
+          <td><span class="pill pill--info">{{ order.deliveryStatus }}</span></td>
+          <td><button type="button" class="action-button">Details</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</article>

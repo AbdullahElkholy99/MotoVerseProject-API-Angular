@@ -1,0 +1,355 @@
+<div class="rent-page">
+  <mat-stepper linear>
+    <!-- STEP 1 -->
+    <mat-step label="Motorcycle Details">
+      <div class="motorcycle-section">
+        <!-- ---------------------- col 1 : images-->
+        <div class="col">
+          <!-- Main Image -->
+          <img [src]="selectedImage() || imageUrl" alt="motorcycle" class="motorcycle-image" />
+
+          <!-- Thumbnails -->
+          <div class="motorcycle-gallery">
+            @for (image of motorcycle().imagesPath; track image) {
+              <img
+                [src]="'https://localhost:7081/images/motorcycle/' + image"
+                alt="motorcycle"
+                class="motorcycle-sub-image"
+                [class.active]="
+                  selectedImage() === 'https://localhost:7081/images/motorcycle/' + image
+                "
+                (click)="changeImage(image)"
+              />
+            }
+          </div>
+        </div>
+
+        <!-- ---------------------- col 2 : details-->
+        <div class="col">
+          <h1>{{ motorcycle().nameEn }}</h1>
+
+          <p class="description">
+            {{ motorcycle().description }}
+          </p>
+
+          <div class="details-grid">
+            <div class="detail-card">
+              <span>Brand</span>
+              <strong>{{ motorcycle().brand }}</strong>
+            </div>
+
+            <div class="detail-card">
+              <span>Model</span>
+              <strong>{{ motorcycle().model }}</strong>
+            </div>
+
+            <div class="detail-card">
+              <span>Engine CC</span>
+              <strong>{{ motorcycle().engineCC }}</strong>
+            </div>
+
+            <div class="detail-card">
+              <span>Year</span>
+              <strong>{{ motorcycle().year }}</strong>
+            </div>
+
+            <div class="detail-card">
+              <span>Color</span>
+              <strong>{{ motorcycle().color }}</strong>
+            </div>
+
+            <div class="detail-card price-card">
+              <span>Price Per Day</span>
+              <strong>${{ motorcycle().pricePerDay }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button mat-raised-button color="primary" matStepperNext>Continue</button>
+      </div>
+    </mat-step>
+
+    <!-- STEP 2 -->
+    <mat-step [stepControl]="rentalForm" label="Rental Information">
+      <form [formGroup]="rentalForm">
+        <!-- Enter a date range -->
+        <mat-form-field appearance="fill">
+          <mat-label>Enter a date range</mat-label>
+
+          <mat-date-range-input [rangePicker]="picker">
+            <input
+              matStartDate
+              [(ngModel)]="startDate"
+              (change)="changeDays()"
+              [min]="today"
+              formControlName="startDate"
+              placeholder="Start date"
+            />
+
+            <input
+              matEndDate
+              [(ngModel)]="endDate"
+              (change)="changeDays()"
+              formControlName="endDate"
+              placeholder="End date"
+            />
+          </mat-date-range-input>
+
+          <mat-datepicker-toggle matSuffix [for]="picker"> </mat-datepicker-toggle>
+
+          <mat-date-range-picker #picker></mat-date-range-picker>
+
+          @if (rentalForm.get('startDate')?.hasError('required')) {
+            <mat-error>Start date is required</mat-error>
+          }
+
+          @if (rentalForm.get('endDate')?.hasError('required')) {
+            <mat-error>End date is required</mat-error>
+          }
+
+          @if (rentalForm.hasError('invalidDateRange')) {
+            <mat-error>End date must be after start date</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Location -->
+        <div class="form-group">
+          <label>Pickup Location</label>
+
+          <input type="text" formControlName="pickupLocation" placeholder="Enter pickup location" />
+
+          @if (
+            rentalForm.get('pickupLocation')?.touched &&
+            rentalForm.get('pickupLocation')?.hasError('required')
+          ) {
+            <small class="error"> Pickup location is required </small>
+          }
+
+          @if (rentalForm.get('pickupLocation')?.hasError('minlength')) {
+            <small class="error"> Minimum 3 characters required </small>
+          }
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-row">
+            <span>Total Days</span>
+            <strong>{{ totalDays }}</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Total Price</span>
+            <strong>${{ totalPrice }}</strong>
+          </div>
+        </div>
+      </form>
+
+      <div class="step-actions">
+        <button mat-button matStepperPrevious>Back</button>
+
+        <button mat-raised-button color="primary" matStepperNext [disabled]="rentalForm.invalid">
+          Continue
+        </button>
+      </div>
+    </mat-step>
+
+    <!-- STEP 3 -->
+    <mat-step [stepControl]="paymentForm" label="Payment Method">
+      <form [formGroup]="paymentForm">
+        <!-- Payment Options -->
+        <div class="payment-options">
+          <label class="payment-card">
+            <input type="radio" value="cash" formControlName="paymentMethod" />
+
+            <i class="ri-money-dollar-circle-line"></i>
+            <span>Cash</span>
+          </label>
+
+          <label class="payment-card">
+            <input type="radio" value="card" formControlName="paymentMethod" />
+
+            <i class="ri-bank-card-line"></i>
+            <span>Credit Card</span>
+          </label>
+
+          <label class="payment-card">
+            <input type="radio" value="wallet" formControlName="paymentMethod" />
+
+            <i class="ri-wallet-3-line"></i>
+            <span>Digital Wallet</span>
+          </label>
+        </div>
+
+        <!-- Credit Card Options -->
+        <!-- Credit Card Options -->
+        @if (paymentForm.get('paymentMethod')?.value === 'card') {
+          <div class="payment-gateways">
+            <label class="gateway-card">
+              <input type="radio" value="visa" formControlName="cardProvider" />
+
+              <div class="gateway-content">
+                <i class="ri-bank-card-line"></i>
+
+                <div>
+                  <h5>Credit / Debit Card</h5>
+                  <p>Visa, Mastercard, Amex</p>
+                </div>
+              </div>
+            </label>
+
+            <label class="gateway-card">
+              <input type="radio" value="paypal" formControlName="cardProvider" />
+
+              <div class="gateway-content">
+                <i class="ri-paypal-line"></i>
+
+                <div>
+                  <h5>PayPal</h5>
+                  <p>Pay via PayPal account</p>
+                </div>
+              </div>
+            </label>
+
+            <label class="gateway-card">
+              <input type="radio" value="stripe" formControlName="cardProvider" />
+
+              <div class="gateway-content">
+                <i class="ri-bank-card-2-line"></i>
+
+                <div>
+                  <h5>Stripe</h5>
+                  <p>Quick & Secure</p>
+                </div>
+              </div>
+            </label>
+
+            <label class="gateway-card">
+              <input type="radio" value="googlepay" formControlName="cardProvider" />
+
+              <div class="gateway-content">
+                <i class="ri-google-line"></i>
+
+                <div>
+                  <h5>Google Pay</h5>
+                  <p>Fast checkout</p>
+                </div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Card Details -->
+          @if (paymentForm.get('cardProvider')?.value === 'visa') {
+            <div class="card-details">
+              <h4>Card Details</h4>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Card Number</mat-label>
+
+                <input
+                  matInput
+                  maxlength="19"
+                  placeholder="1234 5678 9012 3456"
+                  formControlName="cardNumber"
+                />
+              </mat-form-field>
+
+              <div class="card-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>MM/YY</mat-label>
+
+                  <input matInput placeholder="08/28" formControlName="expiryDate" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>CVC</mat-label>
+
+                  <input matInput maxlength="4" placeholder="123" formControlName="cvv" />
+                </mat-form-field>
+              </div>
+            </div>
+          }
+
+          <!-- PayPal -->
+          @if (paymentForm.get('cardProvider')?.value === 'paypal') {
+            <div class="card-details">
+              <h4>PayPal Payment</h4>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>PayPal Email</mat-label>
+
+                <input
+                  matInput
+                  type="email"
+                  placeholder="example@gmail.com"
+                  formControlName="paypalEmail"
+                />
+              </mat-form-field>
+            </div>
+          }
+
+          <!-- Stripe -->
+          @if (paymentForm.get('cardProvider')?.value === 'stripe') {
+            <div class="card-details">
+              <h4>Stripe Payment</h4>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Card Number</mat-label>
+
+                <input
+                  matInput
+                  maxlength="19"
+                  placeholder="1234 5678 9012 3456"
+                  formControlName="cardNumber"
+                />
+              </mat-form-field>
+
+              <div class="card-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>MM/YY</mat-label>
+
+                  <input matInput placeholder="08/28" formControlName="expiryDate" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>CVC</mat-label>
+
+                  <input matInput maxlength="4" placeholder="123" formControlName="cvv" />
+                </mat-form-field>
+              </div>
+            </div>
+          }
+
+          <!-- Google Pay -->
+          @if (paymentForm.get('cardProvider')?.value === 'googlepay') {
+            <div class="card-details">
+              <h4>Google Pay</h4>
+
+              <p class="payment-note">Complete payment using your Google Pay account.</p>
+            </div>
+          }
+        }
+      </form>
+
+      <!-- Summary -->
+      <div class="summary-card">
+        <div class="summary-row">
+          <span>Total Days</span>
+          <strong>{{ totalDays }}</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Total Price</span>
+          <strong>${{ totalPrice }}</strong>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="step-actions">
+        <button mat-button matStepperPrevious>Back</button>
+
+        <button mat-raised-button color="primary" (click)="confirmRental()">Confirm Rental</button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</div>

@@ -1,0 +1,104 @@
+<div class="product-details-container">
+
+  @if (product()) {
+
+    <div class="product-image-section">
+      <img
+       [src]="
+              product()!.imagePath
+                ? 'https://localhost:7081/images/product/' + product()!.imagePath
+                : 'assets/products/default.jpg'
+            "
+         [alt]="product()!.name"
+        class="product-image"
+      />
+    </div>
+
+    <div class="product-info-section">
+
+      <span class="category-badge">
+        {{ product()!.categoryName }}
+      </span>
+
+
+          <h1 class="product-title">
+        {{ product()!.name }}
+      </h1>
+
+      <div class="rating">
+        <i class="ri-star-fill"></i>
+        <span>{{ product()!.rating }}</span>
+      </div>
+
+      <h2 class="price">
+        ${{ product()!.price }}
+      </h2>
+
+      <div class="stock-info">
+
+        <span class="quantity">
+          Quantity: {{ product()!.quantity }}
+        </span>
+
+        <span
+          class="status"
+          [class.active]="product()!.status === 2"
+          [class.out]="product()!.status === 3"
+        >
+          {{ ProductStatus[product()!.status] }}
+        </span>
+
+      </div>
+
+      <div class="description">
+        <h3>Description</h3>
+        <p>{{ product()!.description }}</p>
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="primary-btn"
+          [disabled]="product()!.quantity === 0"
+        >
+          <i class="ri-shopping-cart-line"></i>
+          Add To Cart
+        </button>
+
+        <button
+          class="secondary-btn"
+          routerLink="/home/products"
+        >
+          <i class="ri-arrow-left-line"></i>
+          Back
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+  } @else {
+
+    <div class="loading">
+      <i class="ri-loader-4-line spinner"></i>
+      Loading Product...
+    </div>
+
+  }
+
+</div>
+
+
+<app-product-review
+  [productId]="product()?.id!"
+  [reviews]="product()?.reviews || []"
+  (reviewAdded)="loadProduct(product()?.id!)">
+</app-product-review>
+
+
+
+<app-products-recommendation
+  [productId]="product()?.id!">
+</app-products-recommendation>

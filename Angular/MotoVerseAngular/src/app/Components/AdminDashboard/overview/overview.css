@@ -1,0 +1,11 @@
+:root{--primary-color:#f0a13a;--background-color:#0d0d0d;--text-light:#767268;--white:#fff}
+.admin-page{padding:18px;color:var(--white)}
+.top-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.chart-card{background:linear-gradient(180deg,#0b0b0b,#070707);padding:14px;border-radius:10px;color:var(--white);min-height:120px}
+.charts{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px}
+.chart-placeholder{padding:18px;background:linear-gradient(180deg,#0f0f0f,#0b0b0b);border-radius:8px;text-align:center}
+.recent{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+.simple-table{width:100%;border-collapse:collapse}
+.simple-table th{color:var(--text-light);text-align:left;padding:8px}
+.simple-table td{padding:8px;border-top:1px solid rgba(255,255,255,0.03)}
+@media(max-width:900px){.top-grid{grid-template-columns:repeat(2,1fr)}.charts,.recent{grid-template-columns:1fr}}

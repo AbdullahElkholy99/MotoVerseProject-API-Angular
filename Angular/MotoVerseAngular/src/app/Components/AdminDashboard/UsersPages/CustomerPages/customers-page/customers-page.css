@@ -1,0 +1,173 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-header h2 {
+  color: #f8fafc;
+}
+
+.page-header p,
+.header-pill {
+  color: #94a3b8;
+}
+
+.header-pill {
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  background: rgba(236, 72, 153, 0.12);
+}
+
+.customers-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(18px);
+}
+
+.customer-table__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.customer-table__header h3,
+.customer-table__header span {
+  color: #f8fafc;
+}
+
+.customer-table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 1rem 0.85rem;
+  color: #e2e8f0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+th {
+  color: #94a3b8;
+}
+
+.customer-cell {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.customer-cell img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.customer-cell strong {
+  display: block;
+  color: #f8fafc;
+}
+
+.customer-cell span {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.pill {
+  display: inline-flex;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+}
+
+.pill--success {
+  background: rgba(16, 185, 129, 0.18);
+  color: #a7f3d0;
+}
+
+.pill--warning {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fde68a;
+}
+
+.pill--info {
+  background: rgba(56, 189, 248, 0.18);
+  color: #bfdbfe;
+}
+.pill--inactive {
+  background: rgba(248, 8, 8, 0.3);
+  color: #bfdbfe;
+}
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-action {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-action i {
+  font-size: 18px;
+}
+
+.btn-view {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+
+.btn-view:hover {
+  transform: translateY(-2px);
+  background: rgba(59, 130, 246, 0.25);
+}
+
+.btn-edit {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.btn-edit:hover {
+  transform: translateY(-2px);
+  background: rgba(245, 158, 11, 0.25);
+}
+
+.btn-delete {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.btn-delete:hover {
+  transform: translateY(-2px);
+  background: rgba(239, 68, 68, 0.25);
+}
+/* Inactive Customer => Restore */
+.btn-restore {
+  background: rgba(34, 197, 94, .15);
+  color: #4ade80;
+}
+
+.btn-restore:hover {
+  background: rgba(34, 197, 94, .25);
+  transform: translateY(-2px);
+}

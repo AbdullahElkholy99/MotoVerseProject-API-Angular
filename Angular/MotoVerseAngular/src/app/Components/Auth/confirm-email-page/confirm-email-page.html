@@ -1,0 +1,33 @@
+<div class="confirm-page">
+
+  <div class="confirm-card">
+
+    <div class="success-icon">
+      <i class="fa-solid fa-envelope-circle-check"></i>
+    </div>
+
+    <h2>Confirm Your Email</h2>
+
+    <p class="description">
+      We've sent a verification code to
+    </p>
+
+<div
+  class="message-box"
+  [class.success]="success() === 'true'"
+  [class.fail]="success() === 'false'"
+>
+  {{ message() }}
+</div>
+
+
+    <a
+      routerLink="/login"
+      class="back-link"
+    >
+      Back to Login
+    </a>
+
+  </div>
+
+</div>

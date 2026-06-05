@@ -1,0 +1,98 @@
+@if (selectedMotorcycle()) {
+  <app-modal-overlay
+    [isOpen]="selectedMotorcycle() !== null"
+    width="900px"
+    (close)="closeDetailsModal()"
+  >
+    <div class="details-modal">
+      <!-- SLIDER -->
+      <div class="slider-container">
+        <!-- PREV BUTTON -->
+
+        <button class="slider-btn left" (click)="prevImage()">‹</button>
+
+        <!-- IMAGE -->
+
+        @if (currentImage()) {
+          <div class="image-wrapper">
+            <!-- Glow Background -->
+            <div class="image-glow"></div>
+            <!-- Main Image -->
+            <img class="slider-image" [src]="currentImage()" alt="motorcycle" />
+            <!-- Image Counter -->
+            <div class="image-counter">
+              {{ currentImageIndex() + 1 }}
+              /
+              {{ selectedMotorcycle()?.imagesPath?.length }}
+            </div>
+          </div>
+        } @else {
+          <!-- EMPTY STATE -->
+          <h3 style="color: white">No Image Available</h3>
+          <div class="empty-image">
+            <i class="ri-image-line"></i>
+            <p>This motorcycle does not have images yet</p>
+          </div>
+        }
+
+        <!-- NEXT BUTTON -->
+
+        <button class="slider-btn right" (click)="nextImage()">›</button>
+      </div>
+
+      <!-- DETAILS -->
+
+      <div class="details-content">
+        <h2>
+          {{ selectedMotorcycle()?.nameEn }}
+        </h2>
+
+        <p>
+          {{ selectedMotorcycle()?.description }}
+        </p>
+
+        <div class="details-grid">
+          <div>
+            <span>Brand</span>
+            <strong>
+              {{ selectedMotorcycle()?.brand }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Model</span>
+            <strong>
+              {{ selectedMotorcycle()?.model }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Year</span>
+            <strong>
+              {{ selectedMotorcycle()?.year }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Color</span>
+            <strong>
+              {{ selectedMotorcycle()?.color }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Engine</span>
+            <strong> {{ selectedMotorcycle()?.engineCC }} CC </strong>
+          </div>
+
+          <div>
+            <span>Price / Day</span>
+            <strong> ${{ selectedMotorcycle()?.pricePerDay }} </strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-modal-overlay>
+} @else {
+  <app-no-content />
+}

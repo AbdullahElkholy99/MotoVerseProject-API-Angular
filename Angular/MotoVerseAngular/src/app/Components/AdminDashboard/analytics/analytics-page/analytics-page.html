@@ -1,0 +1,59 @@
+<section class="page-header">
+  <div>
+    <h2>Analytics</h2>
+    <p>Detailed revenue insights, conversion metrics, and traffic performance.</p>
+  </div>
+  <div class="header-pill">Revenue report</div>
+</section>
+
+<div class="analytics-grid">
+  <article class="chart-card">
+    <div class="chart-card__header">
+      <h3>Revenue trend</h3>
+      <span>6 months</span>
+    </div>
+    <div class="line-chart">
+      <div *ngFor="let point of data.revenueSeries(); let i = index" class="line-chart__point" [style.bottom]="(point.value / 500) + 'rem'">
+        <span></span>
+      </div>
+    </div>
+    <div class="chart-labels">
+      <span *ngFor="let point of data.revenueSeries()">{{ point.month }}</span>
+    </div>
+  </article>
+
+  <article class="stats-card">
+    <h3>Sales statistics</h3>
+    <div class="stats-list">
+      <div>
+        <small>Monthly growth</small>
+        <strong>18.4%</strong>
+      </div>
+      <div>
+        <small>Average order value</small>
+        <strong>$142.50</strong>
+      </div>
+      <div>
+        <small>Conversion rate</small>
+        <strong>4.9%</strong>
+      </div>
+    </div>
+  </article>
+
+  <article class="traffic-card">
+    <div class="chart-card__header">
+      <h3>Traffic sources</h3>
+      <span>Performance</span>
+    </div>
+    <div class="traffic-list">
+      <div *ngFor="let source of data.trafficSources()" class="traffic-item">
+        <div>
+          <span>{{ source.source }}</span>
+          <strong>{{ source.percent }}%</strong>
+        </div>
+        <div class="traffic-bar" [style.background]="source.color" [style.width]="source.percent + '%'">
+        </div>
+      </div>
+    </div>
+  </article>
+</div>

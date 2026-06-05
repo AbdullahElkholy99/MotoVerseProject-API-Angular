@@ -1,0 +1,54 @@
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+  <!-- ─── NAME ─── -->
+  <div class="field">
+    <label>Name</label>
+    <!-- formControlName connects to the FormControl named 'name' -->
+    <input type="text" formControlName="name" />
+
+    <div
+      *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched"
+      class="error"
+    >
+      <p *ngIf="categoryForm.get('name')?.errors?.['required']">Name is required.</p>
+      <p *ngIf="categoryForm.get('name')?.errors?.['minlength']">
+        Minimum {{ categoryForm.get('name')?.errors?.['minlength'].requiredLength }} characters.
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── Description ─── -->
+  <div class="field">
+    <label>Description</label>
+    <input type="text" formControlName="description" />
+
+    <div
+      *ngIf="categoryForm.get('description')?.invalid && categoryForm.get('description')?.touched"
+    >
+      <p *ngIf="categoryForm.get('description')?.errors?.['required']" class="error">
+        Description is required.
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── Image File ─── -->
+ <app-image-upload
+  label="Category Image"
+  [preview]="imagePreview()"
+  [errorMessage]="
+    categoryForm.get('imageFile')?.invalid &&
+    categoryForm.get('imageFile')?.touched
+      ? 'Image file is required'
+      : ''
+  "
+  (fileSelected)="handleFile($event)"
+>
+</app-image-upload>
+  <!-- submit -->
+<app-ui-button style="margin-top: 20px;"
+  label="Add"
+  icon="ri-add-line"
+  type="submit"
+  [disabled]="categoryForm.invalid"
+></app-ui-button>
+
+</form>

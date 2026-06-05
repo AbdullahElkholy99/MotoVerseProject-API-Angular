@@ -1,0 +1,5 @@
+:root{--primary-color:#f0a13a;--white:#fff}
+.admin-page{padding:16px;color:var(--white)}
+.report-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:linear-gradient(180deg,#080808,#060606);padding:12px;border-radius:10px}
+@media(max-width:900px){.report-grid{grid-template-columns:1fr}}
