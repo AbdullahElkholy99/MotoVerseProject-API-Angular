@@ -164,6 +164,6 @@ ng serve
 
 ## Author
 
-Ali Mohamed Elnaggar
+Abdullah Ali Elkholy
 
 ASP.NET Core & Angular Developer
