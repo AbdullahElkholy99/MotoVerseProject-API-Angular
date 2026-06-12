@@ -10,20 +10,20 @@ import {
   ValidatorFn
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ForgotPasswordService } from '../../../services/Auth/forgotPassword.service';
-import { Router } from '@angular/router';
+import { ManagePasswordService } from '../../../services/Auth/ManagePassword.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './forgot-password-page.html',
   styleUrls: ['./forgot-password-page.css'],
 })
 export class ForgotPasswordPage implements OnDestroy {
 
   private toastr = inject(ToastrService)
-  private _forgotPasswordService = inject(ForgotPasswordService)
+  private _forgotPasswordService = inject(ManagePasswordService)
 
   currentStep = signal(1);
 
@@ -31,7 +31,7 @@ export class ForgotPasswordPage implements OnDestroy {
   codeForm: FormGroup;
   passwordForm: FormGroup;
 
-  secondsRemaining = 300;
+secondsRemaining = signal(300);
   canResend = false;
 
   private timerId: any;
@@ -180,7 +180,7 @@ export class ForgotPasswordPage implements OnDestroy {
           this.toastr.error(result.message, 'Login Failed');
           return;
         }
-        this.secondsRemaining = 300;
+        this.secondsRemaining.set(300);
         this.canResend = false;
       },
 
@@ -197,22 +197,22 @@ export class ForgotPasswordPage implements OnDestroy {
     this.startTimer();
   }
 
-  startTimer() {
-    clearInterval(this.timerId);
+ startTimer() {
+  clearInterval(this.timerId);
 
-    this.timerId = setInterval(() => {
-      if (this.secondsRemaining > 0) {
-        this.secondsRemaining--;
-      } else {
-        this.canResend = true;
-        clearInterval(this.timerId);
-      }
-    }, 1000);
-  }
+  this.timerId = setInterval(() => {
+    if (this.secondsRemaining() > 0) {
+      this.secondsRemaining.update(v => v - 1);
+    } else {
+      this.canResend = true;
+      clearInterval(this.timerId);
+    }
+  }, 1000);
+}
 
   get formattedTime(): string {
-    const minutes = Math.floor(this.secondsRemaining / 60);
-    const seconds = this.secondsRemaining % 60;
+    const minutes = Math.floor(this.secondsRemaining() / 60);
+    const seconds = this.secondsRemaining() % 60;
 
     return `${minutes.toString().padStart(2, '0')}:${seconds
       .toString()

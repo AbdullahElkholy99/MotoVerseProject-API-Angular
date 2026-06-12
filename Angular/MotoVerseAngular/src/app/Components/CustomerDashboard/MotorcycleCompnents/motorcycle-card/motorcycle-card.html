@@ -71,9 +71,10 @@
       icon="ri-motorbike-line"
       type="primary"
       tooltip="Rental Motorcycle"
+       [loading]="clicked()"
       (clicked)="rentalMotorcycle()"
     />
-     <app-ui-button label="Buy" icon="ri-shopping-cart-line" type="addToCart"  tooltip ="Add To Cart" (clicked)="addToCart()"/>
+     <!-- <app-ui-button label="Buy" icon="ri-shopping-cart-line" type="addToCart"  tooltip ="Add To Cart" (clicked)="addToCart()"/> -->
     </div>
   </div>
 </div>

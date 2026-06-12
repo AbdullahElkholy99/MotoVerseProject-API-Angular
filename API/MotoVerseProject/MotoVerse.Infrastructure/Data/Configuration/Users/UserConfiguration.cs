@@ -1,4 +1,6 @@
-﻿namespace MotoVerse.Infrastructure.Data.Configuration.Users;
+﻿using MotoVerse.Entities.Models.Auth;
+
+namespace MotoVerse.Infrastructure.Data.Configuration.Users;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

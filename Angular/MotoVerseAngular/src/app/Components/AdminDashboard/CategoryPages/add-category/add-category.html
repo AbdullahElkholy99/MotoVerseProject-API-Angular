@@ -31,18 +31,18 @@
   </div>
 
   <!-- ─── Image File ─── -->
- <app-image-upload
-  label="Category Image"
-  [preview]="imagePreview()"
-  [errorMessage]="
-    categoryForm.get('imageFile')?.invalid &&
-    categoryForm.get('imageFile')?.touched
-      ? 'Image file is required'
-      : ''
-  "
-  (fileSelected)="handleFile($event)"
->
-</app-image-upload>
+  <app-image-upload
+    label="Category Image"
+    [preview]="imagePreview()"
+    [errorMessage]="
+      categoryForm.get('imageFile')?.invalid &&
+      categoryForm.get('imageFile')?.touched
+        ? 'Image file is required'
+        : ''
+    "
+    (fileSelected)="handleFile($event)"
+  >
+  </app-image-upload>
   <!-- submit -->
 <app-ui-button style="margin-top: 20px;"
   label="Add"

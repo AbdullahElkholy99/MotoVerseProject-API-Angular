@@ -1,9 +1,6 @@
-﻿
-using MotoVerse.Data.Enums;
+﻿namespace MotoVerse.Core.Features.ProductFeature.Commands.Models;
 
-namespace MotoVerse.Core.Features.ProductFeature.Commands.Models;
-
-public class AddProductCommand : IRequest<Response<string>>
+public class AddProductCommand : IRequest<Response<GetProductByIdResponse>>
 {
     public string NameAr { get; set; }
     public string NameEn { get; set; }

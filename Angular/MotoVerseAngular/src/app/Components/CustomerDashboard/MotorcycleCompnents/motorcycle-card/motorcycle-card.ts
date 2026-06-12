@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { UiButton } from "../../../Shared/ui-button/ui-button";
 import { MotorcycleDTO } from '../../../../models/MotorcycleDTO/motorcycle.interface';
 import { IBasketService } from '../../../../services/MotorcycleServices/basket-service';
@@ -30,8 +30,8 @@ export class MotorcycleCard implements OnInit {
 
   basketId: string = ''
 
-  
-  constructor(private router :Router) {
+
+  constructor(private router: Router) {
 
   }
   ngOnInit(): void {
@@ -70,8 +70,8 @@ export class MotorcycleCard implements OnInit {
   // addToCart
   addToCart() {
 
-    let basketItems : IBasketItem[] =[]
-     basketItems.push({
+    let basketItems: IBasketItem[] = []
+    basketItems.push({
       id: this.motorcycle.id,
       name: this.motorcycle.nameEn,
       imagePath: this.motorcycle.imagePath ?? "",
@@ -79,16 +79,16 @@ export class MotorcycleCard implements OnInit {
       price: this.motorcycle.pricePerDay,
       categoryId: this.motorcycle.brand,
     });
-    const basketDto : IBasket =  {
+    const basketDto: IBasket = {
       id: this.basketId,
-      basketItems : basketItems ?? []
-    } ;
+      basketItems: basketItems ?? []
+    };
 
     this._basketService.edit(basketDto).subscribe({
       next: res => {
-        if(!res.succeeded){
+        if (!res.succeeded) {
           console.log(res.errors);
-        this.toastr.error('Failed to add to cart');
+          this.toastr.error('Failed to add to cart');
           return;
         }
         console.log(res);
@@ -104,7 +104,15 @@ export class MotorcycleCard implements OnInit {
 
 
   // rentalMotorcycle
-rentalMotorcycle() {
-  this.router.navigate(['/home/motorcycle/rental', this.motorcycle.id]);
-}
+  clicked = signal<boolean>(false)
+  rentalMotorcycle() {
+    this.clicked.set(true);
+
+    this.router.navigate([
+      '/home/motorcycle/rental',
+      this.motorcycle.id
+    ]).finally(() => {
+      this.clicked.set(false);
+    });
+  }
 }

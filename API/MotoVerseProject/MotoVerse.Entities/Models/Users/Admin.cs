@@ -1,4 +1,6 @@
 ﻿
+using MotoVerse.Entities.Models.Auth;
+
 namespace MotoVerse.Data.Entities.Users;
 
 public class Admin : User

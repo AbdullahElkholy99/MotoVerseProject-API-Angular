@@ -1,10 +1,11 @@
-﻿using MotoVerse.Core.Features.Shared.UploadImage.Commands.Models;
+﻿using Microsoft.AspNetCore.SignalR;
+using MotoVerse.Core.Features.RealTime;
 
 namespace MotoVerse.Core.Features.ProductFeature.Commands.Handlers;
 
 internal class ProductCommandHandler :
     ResponseHandler,
-    IRequestHandler<AddProductCommand, Response<string>>,
+    IRequestHandler<AddProductCommand, Response<GetProductByIdResponse>>,
     IRequestHandler<DeleteProductCommand, Response<string>>,
     IRequestHandler<EditProductCommand, Response<string>>
 {
@@ -15,7 +16,7 @@ internal class ProductCommandHandler :
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
-
+    private readonly IHubContext<ProductHub> _hubContext;
     #endregion
 
     #region CTOR
@@ -24,21 +25,21 @@ internal class ProductCommandHandler :
         IStringLocalizer<SharedResources> stringLocalizer,
         IRepositoryManager repositoryManager,
         IMediator mediator,
-        IMapper mapper) : base(stringLocalizer)
+        IMapper mapper,
+        IHubContext<ProductHub> hubContext) : base(stringLocalizer)
     {
         _stringLocalizer = stringLocalizer;
         _repositoryManager = repositoryManager;
         _mediator = mediator;
         _mapper = mapper;
+        _hubContext = hubContext;
     }
 
     #endregion
 
     #region Method Handlers
 
-    public async Task<Response<string>> Handle(
-        AddProductCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Response<GetProductByIdResponse>> Handle(AddProductCommand request, CancellationToken cancellationToken)
     {
         await using var transaction =
             await _repositoryManager.ProductRepository.BeginTransactionAsync();
@@ -48,6 +49,11 @@ internal class ProductCommandHandler :
             var product = _mapper.Map<Product>(request);
 
             product.Id = Guid.NewGuid().ToString();
+
+            var adminId = (await _mediator.Send(new GetUserIdQuery())).Data;
+            if (adminId is null)
+                return BadRequest<GetProductByIdResponse>("Added Category Failed");
+            product.AdminId = adminId;
 
             if (request.ImageFile is not null)
             {
@@ -68,19 +74,24 @@ internal class ProductCommandHandler :
 
             await _repositoryManager.ProductRepository.CommitAsync();
 
-            return Created("Added Successfully");
+            var response =
+                _mapper.Map<GetProductByIdResponse>(product);
+
+            await _hubContext.Clients.All.SendAsync(
+                "NewProduct", response, cancellationToken
+                );
+
+            return Created(response);
         }
         catch (Exception)
         {
             await _repositoryManager.ProductRepository.RollBackAsync();
 
-            return BadRequest<string>("Added Failed");
+            return BadRequest<GetProductByIdResponse>("Added Failed");
         }
     }
 
-    public async Task<Response<string>> Handle(
-        EditProductCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Response<string>> Handle(EditProductCommand request, CancellationToken cancellationToken)
     {
         await using var transaction =
             await _repositoryManager.ProductRepository.BeginTransactionAsync();
@@ -93,7 +104,7 @@ internal class ProductCommandHandler :
 
             if (product is null)
                 return BadRequest<string>("This Product Not Exist!");
-
+            var imageOrigin = product.ImagePath;
             if (request.ImageFile is not null)
             {
                 var imagePath = (
@@ -107,9 +118,20 @@ internal class ProductCommandHandler :
 
                 request.ImagePath = imagePath;
             }
+            var adminId = (await _mediator.Send(new GetUserIdQuery())).Data;
+            if (adminId is null)
+                return BadRequest<string>("Added Category Failed");
 
-            // Mapping
-            _mapper.Map(request, product);
+            // Mapping 
+            product.Quantity = request.Quantity;
+            product.Status = request.Status;
+            product.Rating = request.Rating;
+            product.AdminId = adminId;
+            product.Description = request.Description;
+            product.NameAr = request.NameAr;
+            product.NameEn = request.NameEn;
+            product.Price = request.Price;
+            product.CategoryId = request.CategoryId;
 
             // Update
             await _repositoryManager.ProductRepository.UpdateAsync(product);
@@ -130,9 +152,7 @@ internal class ProductCommandHandler :
         }
     }
 
-    public async Task<Response<string>> Handle(
-        DeleteProductCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Response<string>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
         await using var transaction =
             await _repositoryManager.ProductRepository.BeginTransactionAsync();

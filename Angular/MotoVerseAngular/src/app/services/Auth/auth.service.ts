@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { AddUserDTO } from '../../models/Auth/addUserDTO';
 import { signinDTO } from '../../models/Auth/SigninDTO';
 import { Observable } from 'rxjs';
+import { getUserRole } from '../../Helpers/decode-jwt';
 
 @Injectable({ providedIn: 'root' })
 
@@ -28,7 +29,6 @@ export class AuthService {
       displayName: payload.displayName,
       email: payload.email,
       address: payload.address,
-      country: payload.country,
       phoneNumber: payload.phoneNumber,
       password: payload.password,
       confirmPassword: payload.password,
@@ -70,8 +70,26 @@ export class AuthService {
   }
 
 
+
+
   private getStoredUser(): AddUserDTO | null {
     const raw = localStorage.getItem(this.storageKey);
     return raw ? (JSON.parse(raw) as AddUserDTO) : null;
   }
+
+
+    redirectAfterLogin() {
+
+    const roles = getUserRole();
+
+    if (roles.includes('Admin')) {
+      this.router.navigate(['/admin']);
+      return;
+    }
+    if (roles.includes('Customer')) {
+      this.router.navigate(['/home']);
+      return;
+    }
+  }
+
 }

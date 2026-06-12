@@ -13,3 +13,9 @@ public class GetUserByIdResponse
     public int RentalCount { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+public class GetUserInfoResponse
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string PhoneNumber { get; set; }
+}

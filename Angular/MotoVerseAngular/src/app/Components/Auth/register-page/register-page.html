@@ -2,10 +2,12 @@
   <div class="auth-card">
     <!-- Stepper header -->
     <div class="stepper">
-      <div class="step-item"
-           *ngFor="let label of ['Personal', 'Location', 'Security']; let i = index"
-           [class.active]="currentStep === i"
-           [class.done]="currentStep > i">
+      <div
+        class="step-item"
+        *ngFor="let label of ['Personal', 'Location', 'Security']; let i = index"
+        [class.active]="currentStep === i"
+        [class.done]="currentStep > i"
+      >
         <div class="step-circle">
           <span *ngIf="currentStep <= i">{{ i + 1 }}</span>
           <span *ngIf="currentStep > i" class="check-icon">✓</span>
@@ -21,9 +23,14 @@
         Display name
         <input type="text" formControlName="displayName" placeholder="Abdullah Ali" />
       </label>
-      <div class="error" *ngIf="step1.get('displayName')?.touched && step1.get('displayName')?.invalid">
+      <div
+        class="error"
+        *ngIf="step1.get('displayName')?.touched && step1.get('displayName')?.invalid"
+      >
         <span *ngIf="step1.get('displayName')?.errors?.['required']">Full name is required.</span>
-        <span *ngIf="step1.get('displayName')?.errors?.['minlength']">Enter at least 3 characters.</span>
+        <span *ngIf="step1.get('displayName')?.errors?.['minlength']"
+          >Enter at least 3 characters.</span
+        >
       </div>
 
       <label>
@@ -50,21 +57,21 @@
         <span>Address is required.</span>
       </div>
 
-      <label>
-        Country
-        <input type="text" formControlName="country" placeholder="Egypt" />
-      </label>
-      <div class="error" *ngIf="step2.get('country')?.touched && step2.get('country')?.invalid">
-        <span>Country is required.</span>
-      </div>
 
       <label>
         Phone number
         <input type="tel" formControlName="phoneNumber" placeholder="+201012613453" />
       </label>
-      <div class="error" *ngIf="step2.get('phoneNumber')?.touched && step2.get('phoneNumber')?.invalid">
-        <span *ngIf="step2.get('phoneNumber')?.errors?.['required']">Phone number is required.</span>
-        <span *ngIf="step2.get('phoneNumber')?.errors?.['pattern']">Enter a valid phone number.</span>
+      <div
+        class="error"
+        *ngIf="step2.get('phoneNumber')?.touched && step2.get('phoneNumber')?.invalid"
+      >
+        <span *ngIf="step2.get('phoneNumber')?.errors?.['required']"
+          >Phone number is required.</span
+        >
+        <span *ngIf="step2.get('phoneNumber')?.errors?.['pattern']"
+          >Enter a valid phone number.</span
+        >
       </div>
 
       <div class="nav-row">
@@ -79,24 +86,56 @@
         Password
         <input type="password" formControlName="password" placeholder="Min. 8 characters" />
       </label>
-      <div class="error" *ngIf="step3.get('password')?.touched && step3.get('password')?.invalid">
-        <span *ngIf="step3.get('password')?.errors?.['required']">Password is required.</span>
-        <span *ngIf="step3.get('password')?.errors?.['minlength']">Password must be at least 8 characters.</span>
+
+      <div class="password-rules">
+        <div [class.valid]="step3.get('password')?.value?.match(/[A-Z]/)">
+          ✓ One uppercase letter
+        </div>
+
+        <div [class.valid]="step3.get('password')?.value?.match(/[a-z]/)">
+          ✓ One lowercase letter
+        </div>
+
+        <div [class.valid]="step3.get('password')?.value?.match(/\d/)">✓ One number</div>
+
+        <div [class.valid]="step3.get('password')?.value?.match(/[^A-Za-z\d]/)">
+          ✓ One special character
+        </div>
+
+        <div [class.valid]="step3.get('password')?.value?.length >= 8">✓ Minimum 8 characters</div>
       </div>
 
       <label>
         Confirm password
-        <input type="password" formControlName="confirmPassword" placeholder="Repeat your password" />
+        <input
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Repeat your password"
+        />
       </label>
-      <div class="error"
-           *ngIf="(step3.get('confirmPassword')?.touched && step3.get('confirmPassword')?.invalid) || passwordsMismatch">
-        <span *ngIf="step3.get('confirmPassword')?.errors?.['required']">Confirm password is required.</span>
+      <div
+        class="error"
+        *ngIf="
+          (step3.get('confirmPassword')?.touched && step3.get('confirmPassword')?.invalid) ||
+          passwordsMismatch
+        "
+      >
+        <span *ngIf="step3.get('confirmPassword')?.errors?.['required']"
+          >Confirm password is required.</span
+        >
         <span *ngIf="passwordsMismatch">Passwords do not match.</span>
       </div>
 
       <div class="nav-row">
         <button type="button" class="btn" (click)="prev()">Back</button>
-        <button type="button" class="btn primary" (click)="submit()" [disabled]="isSubmitting" [class.loading]="isSubmitting">
+        <button
+          type="button"
+          class="btn primary"
+          (click)="submit()"
+          [disabled]="isSubmitting"
+          [class.loading]="isSubmitting"
+          [disabled]="step3.invalid"
+        >
           {{ isSubmitting ? 'Registering...' : 'Register' }}
         </button>
       </div>
@@ -104,6 +143,5 @@
 
     <div class="message success" *ngIf="message">{{ message }}</div>
     <div class="message error" *ngIf="error">{{ error }}</div>
-
   </div>
 </div>

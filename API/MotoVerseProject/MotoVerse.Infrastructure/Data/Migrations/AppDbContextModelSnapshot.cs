@@ -128,7 +128,7 @@ namespace MotoVerse.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MotoVerse.Data.Entities.Auth.Role", b =>
+            modelBuilder.Entity("MotoVerse.Entities.Models.Auth.MyRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -153,9 +153,25 @@ namespace MotoVerse.Infrastructure.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "F1413B91-312B-42DF-916B-BA615D04CBCD",
+                            ConcurrencyStamp = "26fe7993-d5a5-4bd1-bd9c-18c9f2d968aa",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "F1413B91-312B-42DF-916B-BA615D04CBCF",
+                            ConcurrencyStamp = "2f644040-cb81-4c3b-bf94-a6b9f67481ab",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
-            modelBuilder.Entity("MotoVerse.Data.Entities.Auth.User", b =>
+            modelBuilder.Entity("MotoVerse.Entities.Models.Auth.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -244,43 +260,6 @@ namespace MotoVerse.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.UseTptMappingStrategy();
-                });
-
-            modelBuilder.Entity("MotoVerse.Entities.Models.Auth.UserRefreshToken", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("AddedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("JwtId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRefreshToken");
                 });
 
             modelBuilder.Entity("MotoVerse.Entities.Models.Category", b =>
@@ -816,28 +795,28 @@ namespace MotoVerse.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("MotoVerse.Data.Entities.Users.Admin", b =>
                 {
-                    b.HasBaseType("MotoVerse.Data.Entities.Auth.User");
+                    b.HasBaseType("MotoVerse.Entities.Models.Auth.User");
 
                     b.ToTable("Admins", (string)null);
                 });
 
             modelBuilder.Entity("MotoVerse.Entities.Models.Users.Customer", b =>
                 {
-                    b.HasBaseType("MotoVerse.Data.Entities.Auth.User");
+                    b.HasBaseType("MotoVerse.Entities.Models.Auth.User");
 
                     b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("MotoVerse.Entities.Models.Users.Owner", b =>
                 {
-                    b.HasBaseType("MotoVerse.Data.Entities.Auth.User");
+                    b.HasBaseType("MotoVerse.Entities.Models.Auth.User");
 
                     b.ToTable("Owners", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("MotoVerse.Data.Entities.Auth.Role", null)
+                    b.HasOne("MotoVerse.Entities.Models.Auth.MyRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -846,7 +825,7 @@ namespace MotoVerse.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MotoVerse.Data.Entities.Auth.User", null)
+                    b.HasOne("MotoVerse.Entities.Models.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -855,7 +834,7 @@ namespace MotoVerse.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MotoVerse.Data.Entities.Auth.User", null)
+                    b.HasOne("MotoVerse.Entities.Models.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -864,13 +843,13 @@ namespace MotoVerse.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("MotoVerse.Data.Entities.Auth.Role", null)
+                    b.HasOne("MotoVerse.Entities.Models.Auth.MyRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MotoVerse.Data.Entities.Auth.User", null)
+                    b.HasOne("MotoVerse.Entities.Models.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -879,22 +858,11 @@ namespace MotoVerse.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("MotoVerse.Data.Entities.Auth.User", null)
+                    b.HasOne("MotoVerse.Entities.Models.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("MotoVerse.Entities.Models.Auth.UserRefreshToken", b =>
-                {
-                    b.HasOne("MotoVerse.Data.Entities.Auth.User", "user")
-                        .WithMany("UserRefreshTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("MotoVerse.Entities.Models.Category", b =>
@@ -1091,7 +1059,7 @@ namespace MotoVerse.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("MotoVerse.Data.Entities.Users.Admin", b =>
                 {
-                    b.HasOne("MotoVerse.Data.Entities.Auth.User", null)
+                    b.HasOne("MotoVerse.Entities.Models.Auth.User", null)
                         .WithOne()
                         .HasForeignKey("MotoVerse.Data.Entities.Users.Admin", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1100,7 +1068,7 @@ namespace MotoVerse.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("MotoVerse.Entities.Models.Users.Customer", b =>
                 {
-                    b.HasOne("MotoVerse.Data.Entities.Auth.User", null)
+                    b.HasOne("MotoVerse.Entities.Models.Auth.User", null)
                         .WithOne()
                         .HasForeignKey("MotoVerse.Entities.Models.Users.Customer", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1109,16 +1077,11 @@ namespace MotoVerse.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("MotoVerse.Entities.Models.Users.Owner", b =>
                 {
-                    b.HasOne("MotoVerse.Data.Entities.Auth.User", null)
+                    b.HasOne("MotoVerse.Entities.Models.Auth.User", null)
                         .WithOne()
                         .HasForeignKey("MotoVerse.Entities.Models.Users.Owner", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("MotoVerse.Data.Entities.Auth.User", b =>
-                {
-                    b.Navigation("UserRefreshTokens");
                 });
 
             modelBuilder.Entity("MotoVerse.Entities.Models.Category", b =>

@@ -55,7 +55,8 @@ public class MotorcycleQueryHandler :
 
     public async Task<Response<GetMotorcycleByIdResponse>> Handle(GetMotorcycleByIdQuery request, CancellationToken cancellationToken)
     {
-        var motorcycle = await _repositoryManager.MotorcycleRepository.GetByIdWithIncludeAsync(request.Id, img => img.Images);
+        var motorcycle = await _repositoryManager.MotorcycleRepository
+            .GetByIdWithIncludeAsync(request.Id, img => img.Images);
 
         if (motorcycle is null)
             return NotFound<GetMotorcycleByIdResponse>();

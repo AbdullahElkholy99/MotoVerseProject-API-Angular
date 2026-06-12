@@ -10,11 +10,12 @@ import { BookingStats } from "../booking-stats/booking-stats";
 import { IBookingStatusService } from '../../../../services/MotorcycleServices/IBookingStatusService';
 import { ModalDelete } from "../../../Shared/modal-delete/modal-delete";
 import { ModalOverlay } from "../../../Shared/modal-overlay/modal-overlay";
+import { NoContent } from "../../../Shared/no-content/no-content";
 
 @Component({
   selector: 'app-booking-tracking',
   standalone: true,
-  imports: [CommonModule, FormsModule, BookingDetails, BookingStats, ModalDelete, ModalOverlay],
+  imports: [CommonModule, FormsModule, BookingDetails, BookingStats, ModalDelete, ModalOverlay, NoContent],
   templateUrl: './booking-tracking.html',
   styleUrls: ['./booking-tracking.css', `../../../styleBoke.css`],
 })

@@ -32,7 +32,7 @@
   </header>
 
   <!-- booking-stats -->
-  <app-booking-stats [stats]="stats" />
+  <app-booking-stats *ngIf="  filtered()?.length !== 0" [stats]="stats" />
 
   <section class="list">
     <div *ngIf="loading()" class="skeleton-grid">
@@ -41,10 +41,7 @@
 
     <!-- if not booking -->
     <div *ngIf="!loading() && filtered()?.length === 0" class="empty-state">
-      <img src="/public/assets/hero/hero1.jpg" alt="No bookings" />
-      <h3>You haven't rented a motorcycle yet.</h3>
-      <p>Browse our collection and book your next ride.</p>
-      <a class="btn primary" href="/home/motorcycle">Browse Motorcycles</a>
+      <app-no-content title="You haven't rented a motorcycle yet." message="Browse our collection and book your next ride"></app-no-content>
     </div>
 
     <div *ngIf="!loading()" class="cards">
@@ -130,6 +127,9 @@
   <app-modal-delete (onConfirm)="confirmCancelationBooking()" (onClose)="toogleCancelModel('')" />
 
 </div>
+
+
+
 <app-modal-overlay [isOpen]="openCancelModal()" width="600px" (close)="toogleCancelModel('')">
   <app-modal-delete
     [visible]="openCancelModal()"

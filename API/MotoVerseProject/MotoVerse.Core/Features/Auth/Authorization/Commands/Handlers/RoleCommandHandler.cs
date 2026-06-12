@@ -12,7 +12,7 @@ public class RoleCommandHandler : ResponseHandler,
     #region Fields
 
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
-    private readonly RoleManager<Role> _roleManager;
+    private readonly RoleManager<MyRole> _roleManager;
     private readonly UserManager<User> _userManager;
     private readonly AppDbContext _dbContext;
 
@@ -22,7 +22,7 @@ public class RoleCommandHandler : ResponseHandler,
 
     public RoleCommandHandler(
         IStringLocalizer<SharedResources> stringLocalizer,
-        RoleManager<Role> roleManager,
+        RoleManager<MyRole> roleManager,
         UserManager<User> userManager,
         AppDbContext dbContext)
         : base(stringLocalizer)
@@ -46,7 +46,7 @@ public class RoleCommandHandler : ResponseHandler,
         if (roleExists)
             return BadRequest<string>("Role already exists.");
 
-        var role = new Role
+        var role = new MyRole
         {
             Name = request.RoleName
         };

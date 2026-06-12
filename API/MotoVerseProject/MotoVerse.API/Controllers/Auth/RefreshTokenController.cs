@@ -7,7 +7,7 @@ public class RefreshTokenController : AppControllerBase
 {
 
     [HttpPost(Routing.Authentication.RefreshToken)]
-    public async Task<IActionResult> RefreshToken([FromForm] RefreshTokenCommand command)
+    public async Task<IActionResult> RefreshToken([FromForm] GenerateRefreshTokenCommand command)
     {
         var response = await _mediator.Send(command);
         return NewResult(response);

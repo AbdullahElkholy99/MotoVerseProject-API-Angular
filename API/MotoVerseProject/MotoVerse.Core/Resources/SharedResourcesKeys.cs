@@ -28,8 +28,8 @@ public static class SharedResourcesKeys
     public const string ChangePassFailed = "ChangePassFailed";
     public const string UserName = "UserName";
     public const string Password = "Password";
-    public const string UserNameIsNotExist = "UserNameIsNotExist";
-    public const string PasswordNotCorrect = "PasswordNotCorrect";
+
+    public const string LoginFailed = "Login failed ,Wrong email or password";
 
     public const string AlgorithmIsWrong = "AlgorithmIsWrong";
     public const string TokenIsNotExpired = "TokenIsNotExpired";
@@ -43,6 +43,7 @@ public static class SharedResourcesKeys
     public const string FailedToRemoveOldRoles = "FailedToRemoveOldRoles";
     public const string FailedToUpdateUserRoles = "FailedToUpdateUserRoles";
     public const string FailedToAddNewRoles = "FailedToAddNewRoles";
+    public const string FailedToAssignRole = "Failed To Assign Role";
 
     public const string FailedToUpdateClaims = "FailedToUpdateClaims";
     public const string FailedToAddNewClaims = "FailedToAddNewClaims";
@@ -55,6 +56,7 @@ public static class SharedResourcesKeys
     public const string ErrorWhenConfirmEmail = "ErrorWhenConfirmEmail";
     public const string ConfirmEmailDone = "ConfirmEmailDone";
     public const string SendConfirmEmailDone = "Send Confirm Email Success";
+    public const string SendConfirmEmailFail = "Send Confirm Email Fail";
     public const string TryAgainInAnotherTime = "TryAgainInAnotherTime";
     public const string InvaildCode = "InvaildCode";
     public const string NoImage = "NoImage";

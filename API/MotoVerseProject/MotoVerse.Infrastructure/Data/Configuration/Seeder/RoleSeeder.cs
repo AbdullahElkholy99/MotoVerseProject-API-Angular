@@ -1,33 +1,23 @@
-﻿using Microsoft.AspNetCore.Identity;
-
+﻿using MotoVerse.Entities.Models.Auth;
 
 namespace MotoVerse.Infrastructure.Data.Configuration.Seeder;
 
-public static class RoleSeeder
+public class RoleConfiguration : IEntityTypeConfiguration<MyRole>
 {
-    public static async Task SeedAsync(RoleManager<MotoVerse.Data.Entities.Auth.Role> _roleManager)
+    public void Configure(EntityTypeBuilder<MyRole> builder)
     {
-        var rolesCount = await _roleManager.Roles.CountAsync();
-        if (rolesCount <= 0)
-        {
-
-            await _roleManager.CreateAsync(new MotoVerse.Data.Entities.Auth.Role()
+        builder.HasData(
+            new MyRole
             {
-                Name = "Admin"
-            });
-            await _roleManager.CreateAsync(new MotoVerse.Data.Entities.Auth.Role()
+                Id = "F1413B91-312B-42DF-916B-BA615D04CBCD",
+                Name = "Customer",
+                NormalizedName = "CUSTOMER"
+            },
+            new MyRole
             {
-                Name = "User"
+                Id = "F1413B91-312B-42DF-916B-BA615D04CBCF",
+                Name = "Admin",
+                NormalizedName = "ADMIN"
             });
-            await _roleManager.CreateAsync(new MotoVerse.Data.Entities.Auth.Role()
-            {
-                Name = "Owner"
-            });
-            await _roleManager.CreateAsync(new MotoVerse.Data.Entities.Auth.Role()
-            {
-                Name = "Customer"
-            });
-        }
     }
-
 }

@@ -1,16 +1,17 @@
-﻿
-namespace MotoVerse.Core.Features.Auth.AuthenticationFeature.Command.Validators;
+﻿namespace MotoVerse.Core.Features.Auth.AuthenticationFeature.Command.Validators;
 
-public class AddUserValidator : AbstractValidator<AddUserCommand>
+public class AddUserValidator : AbstractValidator<AddCustomerCommand>
 {
     #region Fields
     private readonly IStringLocalizer<SharedResources> _localizer;
+    private readonly UserManager<User> _userManager;
     #endregion
 
     #region Constructors
-    public AddUserValidator(IStringLocalizer<SharedResources> localizer)
+    public AddUserValidator(IStringLocalizer<SharedResources> localizer, UserManager<User> userManager)
     {
         _localizer = localizer;
+        _userManager = userManager;
         ApplyValidationsRules();
         ApplyCustomValidationsRules();
     }
@@ -42,6 +43,14 @@ public class AddUserValidator : AbstractValidator<AddUserCommand>
 
     public void ApplyCustomValidationsRules()
     {
+        RuleFor(x => x.Email)
+            .MustAsync(async (email, cancellationToken) =>
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                return user == null;
+            })
+            .WithMessage(_localizer[SharedResourcesKeys.EmailIsExist]);
+
 
     }
 

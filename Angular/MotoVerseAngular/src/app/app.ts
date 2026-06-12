@@ -9,7 +9,7 @@ import { getUserInfo } from './Helpers/decode-jwt';
   standalone: true,
   imports: [
     RouterOutlet
-    ,PaginationModule,
+    , PaginationModule,
     NgxSpinnerModule
 
 
@@ -17,13 +17,14 @@ import { getUserInfo } from './Helpers/decode-jwt';
   templateUrl: './app.html',
   styleUrls: ['./app.css'],
 })
-export class App implements OnInit{
+export class App implements OnInit {
 
-  image =''
+  image = ''
   ngOnInit(): void {
-  const userInfo = getUserInfo()
-    this.image = `https://localhost:7081/${userInfo[0].imagePath}`
-    
-   localStorage.setItem("userInfo",JSON.stringify(userInfo))
+    const userInfo = getUserInfo()
+    if (userInfo.length > 0) {
+      this.image = `https://localhost:7081/${userInfo[0].imagePath}`
+      localStorage.setItem("userInfo", JSON.stringify(userInfo))
+    }
   }
 }

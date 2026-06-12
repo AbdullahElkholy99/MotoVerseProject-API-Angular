@@ -2,7 +2,7 @@
 
 public static partial class QueryAuth
 {
-    public static User MapToUser(this AddUserCommand addUser)
+    public static User MapToUser(this AddCustomerCommand addUser)
     {
         return new User
         {

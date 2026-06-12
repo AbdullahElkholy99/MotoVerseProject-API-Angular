@@ -1,0 +1,52 @@
+  <article class="settings-card">
+    <h3>Admin profile</h3>
+
+    <div class="profile-fields">
+      <form [formGroup]="adminProfileForm" (ngSubmit)="onSubmit()">
+
+        <!-- Name -->
+        <label>Name</label>
+        <input type="text" formControlName="name">
+        <div  class="error" *ngIf="adminProfileForm.get('name')?.invalid &&
+                    adminProfileForm.get('name')?.touched">
+          <p *ngIf="adminProfileForm.get('name')?.errors?.['required']">
+           Name is required.
+          </p>
+          <p *ngIf="adminProfileForm.get('name')?.errors?.['minlength']">
+            Minimum {{ adminProfileForm.get('name')?.errors?.['minlength'].requiredLength }} characters.
+          </p>
+        </div>
+
+        <!-- Email -->
+        <label>Email</label>
+        <input type="text" formControlName="email">
+        <div class="error" *ngIf="adminProfileForm.get('email')?.invalid &&
+                    adminProfileForm.get('email')?.touched">
+          <p *ngIf="adminProfileForm.get('email')?.errors?.['required']">
+            Email is required.
+          </p>
+          <p *ngIf="adminProfileForm.get('email')?.errors?.['minlength']">
+            Minimum {{ adminProfileForm.get('email')?.errors?.['minlength'].requiredLength }} characters.
+          </p>
+        </div>
+
+        <!-- Phone Number -->
+        <label>Phone Number</label>
+
+        <input type="text" formControlName="phoneNumber">
+          <div class="error" *ngIf="adminProfileForm.get('phoneNumber')?.invalid &&
+                      adminProfileForm.get('phoneNumber')?.touched">
+            <p *ngIf="adminProfileForm.get('phoneNumber')?.errors?.['required']">
+              Phone Number is required.
+            </p>
+            <p *ngIf="adminProfileForm.get('phoneNumber')?.errors?.['minlength']">
+              Minimum {{ adminProfileForm.get('phoneNumber')?.errors?.['minlength'].requiredLength }} characters.
+            </p>
+          </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="adminProfileForm.invalid">
+           {{ buttonLabel() }}
+        </button>
+      </form>
+    </div>
+  </article>

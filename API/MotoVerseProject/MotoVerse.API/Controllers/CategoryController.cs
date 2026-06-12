@@ -1,6 +1,6 @@
 namespace MotoVerse.API.Controllers;
 
-//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
 public class CategoryController : AppControllerBase
 {
     #region Handlers Function

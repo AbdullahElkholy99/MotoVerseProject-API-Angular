@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.Extensions.Options;
-using MotoVerse.Core.Features.Shared.EmailFeature.Commands.Models;
 using System.Net;
 using System.Net.Mail;
 

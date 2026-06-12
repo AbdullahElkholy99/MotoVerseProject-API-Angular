@@ -47,18 +47,13 @@ export class AddCategory implements OnInit {
 
   // FILE SELECT
   handleFile(file: File) {
-
-    this.categoryForm.patchValue({
-      imageFile: file
-    });
+    this.categoryForm.patchValue({imageFile: file  });
 
     const reader = new FileReader();
 
     reader.onload = () => {
-
       this.imagePreview.set(reader.result);
     };
-
     reader.readAsDataURL(file);
   }
 

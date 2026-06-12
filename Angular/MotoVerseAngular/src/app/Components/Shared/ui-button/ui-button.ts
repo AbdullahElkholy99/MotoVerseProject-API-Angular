@@ -12,6 +12,7 @@ export class UiButton {
 
   @Input() label = 'Button';
   @Input() tooltip = '';
+  @Input() loading = false;
 
   @Input() icon = '';
   @Input() iconOnly = false;

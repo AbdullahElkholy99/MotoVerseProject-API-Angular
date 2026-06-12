@@ -7,7 +7,7 @@ namespace MotoVerse.Infrastructure.Repository.Base;
 
 public class RepositoryManager : IRepositoryManager
 {
-    private readonly Lazy<IRefreshTokenRepository> _refreshTokenRepository;
+    //private readonly Lazy<IRefreshTokenRepository> _refreshTokenRepository;
 
     private readonly Lazy<IProductRepository> _productRepository;
     private readonly Lazy<IReviewProductRepository> _reviewProductRepository;
@@ -37,7 +37,7 @@ public class RepositoryManager : IRepositoryManager
     #endregion
     public RepositoryManager(AppDbContext context, IConnectionMultiplexer redis)
     {
-        _refreshTokenRepository = new Lazy<IRefreshTokenRepository>(() => new RefreshTokenRepository(context));
+        //_refreshTokenRepository = new Lazy<IRefreshTokenRepository>(() => new RefreshTokenRepository(context));
 
         _productRepository = new Lazy<IProductRepository>(() => new ProductRepository(context));
         _reviewProductRepository = new Lazy<IReviewProductRepository>(() => new ReviewProductRepository(context));
@@ -66,7 +66,7 @@ public class RepositoryManager : IRepositoryManager
         #endregion
     }
 
-    public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository.Value;
+    //public IRefreshTokenRepository RefreshTokenRepository => _refreshTokenRepository.Value;
 
     public IProductRepository ProductRepository => _productRepository.Value;
     public IReviewProductRepository ReviewProductRepository => _reviewProductRepository.Value;

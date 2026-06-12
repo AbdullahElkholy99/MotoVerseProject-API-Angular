@@ -1,14 +1,15 @@
-﻿using MotoVerse.Core.Features.ApplicationUser.Queries.Models;
-using MotoVerse.Core.Features.ApplicationUser.Queries.Results;
+﻿
 
 namespace MotoVerse.Core.Features.ApplicationUser.Queries.Handlers
 {
     public class UserQueryHandler : ResponseHandler,
          IRequestHandler<GetUserPaginationQuery, PaginatedResult<GetUserPaginationReponse>>,
-         IRequestHandler<GetUserByIdQuery, Response<GetUserByIdResponse>>
+         IRequestHandler<GetUserByIdQuery, Response<GetUserByIdResponse>>,
+         IRequestHandler<GetUserInfoQuery, Response<GetUserInfoResponse>>
     {
         #region Fields
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
         private readonly IStringLocalizer<SharedResources> _sharedResources;
         private readonly UserManager<User> _userManager;
         private readonly IRepositoryManager _repositoryManager;
@@ -18,12 +19,14 @@ namespace MotoVerse.Core.Features.ApplicationUser.Queries.Handlers
         public UserQueryHandler(IStringLocalizer<SharedResources> stringLocalizer,
                                   IMapper mapper,
                                   UserManager<User> userManager,
-                                  IRepositoryManager repositoryManager) : base(stringLocalizer)
+                                  IRepositoryManager repositoryManager,
+                                  IMediator mediator) : base(stringLocalizer)
         {
             _mapper = mapper;
             _sharedResources = stringLocalizer;
             _userManager = userManager;
             _repositoryManager = repositoryManager;
+            _mediator = mediator;
         }
         #endregion
 
@@ -85,6 +88,28 @@ namespace MotoVerse.Core.Features.ApplicationUser.Queries.Handlers
                 CreatedAt = customer.CreatedAt
             };
             return Success(customerDTO);
+        }
+
+        public async Task<Response<GetUserInfoResponse>> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
+        {
+            var userId = (await _mediator.Send(new GetUserIdQuery())).Data;
+            if (userId is null)
+                return NotFound<GetUserInfoResponse>(_sharedResources[SharedResourcesKeys.NotFound]);
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
+                return NotFound<GetUserInfoResponse>(_sharedResources[SharedResourcesKeys.NotFound]);
+
+
+            var result = new GetUserInfoResponse
+            {
+                Email = user.Email,
+                Name = user.DisplayName,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            return Success<GetUserInfoResponse>(result);
+
         }
         #endregion
     }

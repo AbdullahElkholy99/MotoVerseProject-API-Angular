@@ -1,4 +1,5 @@
-﻿
+﻿using MotoVerse.Core.Features.Auth.ConfirmEmailFeature.Command.Models;
+
 namespace MotoVerse.Core.Features.AuthenticationFeature.Command.Handlers;
 
 public class AuthenticationCommandHandler : ResponseHandler,
@@ -13,6 +14,7 @@ public class AuthenticationCommandHandler : ResponseHandler,
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUrlHelper _urlHelper;
+    private readonly IRepositoryManager _repositoryManager;
 
     #endregion
 
@@ -23,7 +25,8 @@ public class AuthenticationCommandHandler : ResponseHandler,
         SignInManager<User> signInManager,
         IMediator mediator,
         IHttpContextAccessor httpContextAccessor,
-        IUrlHelper urlHelper) : base(stringLocalizer)
+        IUrlHelper urlHelper,
+        IRepositoryManager repositoryManager) : base(stringLocalizer)
     {
         _stringLocalizer = stringLocalizer;
         _userManager = userManager;
@@ -31,6 +34,7 @@ public class AuthenticationCommandHandler : ResponseHandler,
         _mediator = mediator;
         _httpContextAccessor = httpContextAccessor;
         _urlHelper = urlHelper;
+        _repositoryManager = repositoryManager;
     }
 
 
@@ -42,50 +46,27 @@ public class AuthenticationCommandHandler : ResponseHandler,
         var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
-            return BadRequest<JwtAuthResult>(
-                _stringLocalizer[SharedResourcesKeys.UserNameIsNotExist]);
+            return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.LoginFailed], _stringLocalizer[SharedResourcesKeys.LoginFailed]);
 
-        var signInResult = await _signInManager.CheckPasswordSignInAsync(
-            user,
-            request.Password,
-            false);
+        var checkPassword =
+            await _userManager.CheckPasswordAsync(user, request.Password);
+        //await _signInManager.CheckPasswordSkignInAsync(user, request.Password, false);
 
-        if (!signInResult.Succeeded)
-            return BadRequest<JwtAuthResult>(
-                _stringLocalizer[SharedResourcesKeys.PasswordNotCorrect]);
+        if (!checkPassword)
+            return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.LoginFailed]);
 
         // Email not confirmed
         if (!user.EmailConfirmed)
         {
             // Generate new confirmation token
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-            var encryptedEmail = (await _mediator.Send(
-                new EncryptionProviderCommand
-                {
-                    Data = user.Email!
-                })).Data;
-
-            var encryptedCode = (await _mediator.Send(
-                new EncryptionProviderCommand
-                {
-                    Data = code
-                })).Data;
-
-            var requestAccessor = _httpContextAccessor.HttpContext!.Request;
-
-            var confirmationUrl =
-                $"{requestAccessor.Scheme}://{requestAccessor.Host}" +
-                $"/api/V1/ConfirmEmail/confirm-email" +
-                $"?email={encryptedEmail}&code={encryptedCode}";
-
-            await _mediator.Send(new SendEmailCommand
+            //BackgroundJob.Enqueue<IMediator>(
+            //    svc => svc.Send(new SendEmailConfirmationCommand()
+            //    {
+            //        User = user
+            //    }));
+            await _mediator.Send(new SendEmailConfirmationCommand()
             {
-                Email = user.Email!,
-                Subject = "Confirm Your Email",
-                Message =
-                    $"Please confirm your email by clicking " +
-                    $"<a href='{confirmationUrl}'>here</a>"
+                User = user
             });
 
             return BadRequest<JwtAuthResult>(
@@ -93,31 +74,22 @@ public class AuthenticationCommandHandler : ResponseHandler,
                 {
                     ConfirmEmail = false,
                     EmailSent = true
-                },
-                "Email is not confirmed. A new confirmation email has been sent.");
+                }, "Email is not confirmed. A new confirmation email has been sent.");
         }
 
-        var result = (await _mediator.Send(
-            new GenerateRefreshTokenCommand
+        var token = (await _mediator.Send(
+            new GenerateAccessTokenCommand
             {
                 User = user
             })).Data;
 
-        return Success(result);
+        return Success(token, message: "Success Login");
     }
     public async Task<Response<string>> Handle(LogoutCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _signInManager.SignOutAsync();
-            return Success("Success Logout");
-        }
-        catch (Exception)
-        {
-            return BadRequest<string>("Failed Logout");
+        await _signInManager.SignOutAsync();
 
-            throw;
-        }
+        return Success("Logout Successfully");
     }
 
     #endregion

@@ -6,12 +6,12 @@ namespace MotoVerse.Core.Features.Authorization.Commands.Validators
     {
         #region Fields
         private readonly IStringLocalizer<SharedResources> _stringLocalizer;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly RoleManager<MyRole> _roleManager;
         #endregion
 
         #region Constructors
 
-        public AddRoleValidators(IStringLocalizer<SharedResources> stringLocalizer, RoleManager<Role> roleManager)
+        public AddRoleValidators(IStringLocalizer<SharedResources> stringLocalizer, RoleManager<MyRole> roleManager)
         {
             _stringLocalizer = stringLocalizer;
             ApplyValidationsRules();

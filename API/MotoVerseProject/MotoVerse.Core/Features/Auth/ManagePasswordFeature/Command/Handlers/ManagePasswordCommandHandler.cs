@@ -1,16 +1,16 @@
-﻿using MotoVerse.Core.Features.ManagePasswordFeature.Command.Models;
-using MotoVerse.Core.Features.Shared.EmailFeature.Commands.Models;
-
+﻿
 namespace MotoVerse.Core.Features.ManagePasswordFeature.Command.Handlers;
 
 public class ManagePasswordCommandHandler : ResponseHandler,
     IRequestHandler<SendResetPasswordCommand, Response<string>>,
-    IRequestHandler<ResetPasswordCommand, Response<string>>
+    IRequestHandler<ResetPasswordCommand, Response<string>>,
+        IRequestHandler<ChangeUserPasswordCommand, Response<string>>
+
 {
 
 
     #region Fields
-    private readonly IStringLocalizer<SharedResources> _stringLocalizer;
+    private readonly IStringLocalizer<SharedResources> _sharedResources;
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IRepositoryManager _repositoryManager;
@@ -29,7 +29,7 @@ public class ManagePasswordCommandHandler : ResponseHandler,
         IRepositoryManager repositoryManager,
         AppDbContext dbContext) : base(stringLocalizer)
     {
-        _stringLocalizer = stringLocalizer;
+        _sharedResources = stringLocalizer;
         _userManager = userManager;
         _signInManager = signInManager;
         _mediator = mediator;
@@ -47,11 +47,11 @@ public class ManagePasswordCommandHandler : ResponseHandler,
         var result = await SendResetPasswordCode(request.Email);
         switch (result)
         {
-            case "UserNotFound": return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.UserIsNotFound]);
-            case "ErrorInUpdateUser": return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.TryAgainInAnotherTime]);
-            case "Failed": return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.TryAgainInAnotherTime]);
+            case "UserNotFound": return BadRequest<string>(_sharedResources[SharedResourcesKeys.UserIsNotFound]);
+            case "ErrorInUpdateUser": return BadRequest<string>(_sharedResources[SharedResourcesKeys.TryAgainInAnotherTime]);
+            case "Failed": return BadRequest<string>(_sharedResources[SharedResourcesKeys.TryAgainInAnotherTime]);
             case "Success": return Success<string>("");
-            default: return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.TryAgainInAnotherTime]);
+            default: return BadRequest<string>(_sharedResources[SharedResourcesKeys.TryAgainInAnotherTime]);
         }
     }
 
@@ -60,12 +60,38 @@ public class ManagePasswordCommandHandler : ResponseHandler,
         var result = await ResetPassword(request.Email, request.Password);
         switch (result)
         {
-            case "UserNotFound": return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.UserIsNotFound]);
-            case "Failed": return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.InvaildCode]);
+            case "UserNotFound": return BadRequest<string>(_sharedResources[SharedResourcesKeys.UserIsNotFound]);
+            case "Failed": return BadRequest<string>(_sharedResources[SharedResourcesKeys.InvaildCode]);
             case "Success": return Success<string>("", message: "Send Code Success");
-            default: return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.InvaildCode]);
+            default: return BadRequest<string>(_sharedResources[SharedResourcesKeys.InvaildCode]);
         }
     }
+    public async Task<Response<string>> Handle(ChangeUserPasswordCommand request, CancellationToken cancellationToken)
+    {
+        var userId = (await _mediator.Send(new GetUserIdQuery())).Data;
+        if (userId is null)
+            return BadRequest<string>((string)_sharedResources[SharedResourcesKeys.ChangePassFailed]);
+
+        //get user
+        //check if user is exist
+        var user = await _userManager.FindByIdAsync(userId);
+        //if Not Exist notfound
+        if (user == null) return NotFound<string>();
+
+        //Change User Password
+        var result = await _userManager.ChangePasswordAsync(
+            user,
+            request.CurrentPassword,
+            request.NewPassword);
+        //var user1=await _userManager.HasPasswordAsync(user);
+        //await _userManager.RemovePasswordAsync(user);
+        //await _userManager.AddPasswordAsync(user, request.NewPassword);
+
+        //result
+        if (!result.Succeeded) return BadRequest<string>(result.Errors.FirstOrDefault().Description);
+        return Success((string)_sharedResources[SharedResourcesKeys.Success], message: _sharedResources[SharedResourcesKeys.Success]);
+    }
+
 
     #region Helper Methods
 

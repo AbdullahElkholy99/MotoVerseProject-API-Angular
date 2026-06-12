@@ -14,6 +14,7 @@ import { CategoryService } from '../../../services/category-service';
 import { IBasket, IBasketItem } from '../../../models/MotorcycleDTO/basket';
 import { IBasketService } from '../../../services/MotorcycleServices/basket-service';
 import { NoContent } from "../../Shared/no-content/no-content";
+import { ProductSignalrService } from '../../../services/Products/product-signalr-service';
 @Component({
   selector: 'app-products',
   imports: [TitlePipe, StarPipe, NoContent],
@@ -23,6 +24,7 @@ import { NoContent } from "../../Shared/no-content/no-content";
 export class Products implements OnInit {
 
   // ----------------- injecting the category service
+  _productSignlRService = inject(ProductSignalrService);
   productService = inject(ProductService);
   categoryService = inject(CategoryService);
   _basketService = inject(IBasketService)
@@ -80,6 +82,33 @@ export class Products implements OnInit {
 
     this.basketId = this._basketService.getBasketId();
 
+    //start connection SignalR
+    this.startConSignalR()
+
+  }
+
+  startConSignalR() {
+     this._productSignlRService
+    .startConnection()
+    .then(() => {
+      this._productSignlRService.onNewProduct(
+        (product: ProductDTO) => {
+
+          this.products.update(products => [
+            product,
+            ...products
+          ]);
+
+          this.totalItems.update(v => v + 1);
+
+          this.toastr.info(
+            `${product.name} added now`,
+            'New Product'
+          );
+        }
+      );
+    });
+
   }
 
   // ---------------  Get All Categories ---------------
@@ -129,7 +158,6 @@ export class Products implements OnInit {
 
   }
 
-
   // ----------------- Get All Categories
   getAllCategories() {
     this.categoryService.getAll().subscribe({
@@ -148,8 +176,6 @@ export class Products implements OnInit {
       }
     });
   }
-
-
 
   selectCategory(category: GetCategoryDTO) {
     this.selectedCategory.set(category.name);

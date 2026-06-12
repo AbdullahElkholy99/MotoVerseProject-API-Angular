@@ -1,4 +1,5 @@
-﻿using MotoVerse.Entities.Models.Motorcycles;
+﻿using MotoVerse.Entities.Models.Auth;
+using MotoVerse.Entities.Models.Motorcycles;
 
 namespace MotoVerse.Entities.Models.Users;
 

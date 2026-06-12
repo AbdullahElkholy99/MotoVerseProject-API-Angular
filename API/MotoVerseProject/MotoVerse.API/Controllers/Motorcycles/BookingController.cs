@@ -4,6 +4,7 @@ using MotoVerse.Core.Features.MotorcycleFeatures.BookingFeature.Queries.Models;
 
 namespace MotoVerse.API.Controllers.Motorcycles;
 
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class BookingController : AppControllerBase
 {
     private readonly IMediator _mediator;

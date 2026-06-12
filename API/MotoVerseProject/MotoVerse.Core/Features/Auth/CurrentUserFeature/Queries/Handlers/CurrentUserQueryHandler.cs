@@ -59,9 +59,8 @@ public class CurrentUserQueryHandler : ResponseHandler,
     private string GetUserId()
     {
         return _httpContextAccessor.HttpContext?.User?
-                   .Claims
-                   .FirstOrDefault(c => c.Type == nameof(UserClaimModel.Id))
-                   ?.Value
+                   .FindFirst(ClaimTypes.NameIdentifier)?
+                   .Value
                ?? throw new UnauthorizedAccessException("User is not authenticated.");
     }
 

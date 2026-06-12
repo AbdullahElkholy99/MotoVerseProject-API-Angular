@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MotoVerse.Entities.Models.Auth;
 
-namespace MotoVerse.Data.Entities.Auth;
+namespace MotoVerse.Entities.Models.Auth;
 
 public class User : IdentityUser
 {
@@ -12,8 +11,9 @@ public class User : IdentityUser
     public bool IsActive { get; set; } = true;
 
     public string? Code { get; set; }
-    [InverseProperty(nameof(UserRefreshToken.user))]
-    public virtual ICollection<UserRefreshToken> UserRefreshTokens { get; set; }
+
+    //[InverseProperty(nameof(UserRefreshToken.user))]
+    //public virtual ICollection<UserRefreshToken> UserRefreshTokens { get; set; }
 
 
 }

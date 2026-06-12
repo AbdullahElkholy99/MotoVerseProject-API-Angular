@@ -2,8 +2,10 @@ import { Routes } from '@angular/router';
 import { loginGuard } from './guards/login-guard';
 import { roleGuard } from './guards/role-guard';
 import { authGuard } from './guards/auth-guard';
+import { redirectGuard } from './guards/redirect-guard';
 
 export const routes: Routes = [
+
   // Default Route
   {
     path: '',
@@ -153,11 +155,10 @@ export const routes: Routes = [
         .then((m) => m.LandingPage),
 
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['User'] },
+    data: { roles: ['Customer'] },
 
 
     children: [
-      // CUSTOMER BOOKING TRACKING
       {
         path: 'my-bookings',
         loadComponent: () =>
@@ -176,6 +177,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Components/Bases/about-us/about-us')
             .then((m) => m.AboutUs)
+      },
+      {
+        path: 'contact',
+        loadComponent: () =>
+          import('./Components/Bases/contact-us/contact-us')
+            .then((m) => m.ContactUs)
       },
 
       {

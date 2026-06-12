@@ -14,7 +14,7 @@ public class RoleQueryHandler : ResponseHandler,
     private readonly IMapper _mapper;
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     private readonly UserManager<User> _userManager;
-    private readonly RoleManager<Role> _roleManager;
+    private readonly RoleManager<MyRole> _roleManager;
 
     #endregion
 
@@ -24,7 +24,7 @@ public class RoleQueryHandler : ResponseHandler,
         IStringLocalizer<SharedResources> stringLocalizer,
         IMapper mapper,
         UserManager<User> userManager,
-        RoleManager<Role> roleManager)
+        RoleManager<MyRole> roleManager)
         : base(stringLocalizer)
     {
         _mapper = mapper;

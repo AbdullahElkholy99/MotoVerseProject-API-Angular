@@ -16,8 +16,6 @@
 		<Folder Include="Features\Auth\AuthenticationFeature\Query\Handles\" />
 		<Folder Include="Features\Auth\AuthenticationFeature\Query\Models\" />
 		<Folder Include="Features\Auth\AuthenticationFeature\Query\Validators\" />
-		<Folder Include="Features\Auth\ConfirmEmailFeature\Command\Handlers\" />
-		<Folder Include="Features\Auth\ConfirmEmailFeature\Command\Models\" />
 		<Folder Include="Features\Auth\ConfirmEmailFeature\Command\Validators\" />
 		<Folder Include="Features\Auth\CurrentUserFeature\Commands\Handlers\" />
 		<Folder Include="Features\Auth\CurrentUserFeature\Commands\Models\" />

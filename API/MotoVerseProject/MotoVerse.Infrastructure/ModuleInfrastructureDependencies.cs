@@ -1,5 +1,5 @@
 ﻿
-using StackExchange.Redis;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace MotoVerse.Infrastructure;
 
@@ -11,6 +11,8 @@ public static class ModuleInfrastructureDependencies
         services.AddDbContext<AppDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            options.ConfigureWarnings(w =>
+            w.Ignore(RelationalEventId.PendingModelChangesWarning));
         });
 
         // Apply Redis Connection : 

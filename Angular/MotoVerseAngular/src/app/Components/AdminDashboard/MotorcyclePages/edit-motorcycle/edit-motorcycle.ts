@@ -37,8 +37,8 @@ export class EditMotorcycle implements OnInit {
   // Main Image
   selectedImage: File | null = null;
 
-  imagePreview: string | ArrayBuffer | null = null;
-
+  imagePreview =signal< string | ArrayBuffer | null>( null);
+mainImagePreview = signal<string>('assets/images/defualt.jpg');
   // Multiple Images
   selectedImages: File[] = [];
 
@@ -76,10 +76,8 @@ export class EditMotorcycle implements OnInit {
           return;
         }
         const motorCycle = result.data
-        console.log("------------------- motorCycle get by id", motorCycle);
 
         this.formPatchValue(motorCycle)
-
       },
       error: (error) => {
         console.error(error);
@@ -103,11 +101,14 @@ export class EditMotorcycle implements OnInit {
       description: motorCycle.description,
       ownerId: motorCycle.ownerId,
     });
-    if (motorCycle.imagePath)
-      this.imagePreview = motorCycle.imagePath;
+    if (motorCycle.imagePath) {
+  this.mainImagePreview.set(
+    `https://localhost:7081/images/motorcycle/${motorCycle.imagePath}`
+  );
+}
+    // if (motorCycle.imagePath)this.imagePreview.set( motorCycle.imagePath);
     if (motorCycle.imagesPath)
       this.imagePreviews = motorCycle.imagesPath?.map((x: any) => x);
-    console.log("imagePreviews : ", this.imagePreviews);
 
   }
   // ----------------------------- initializeForm
@@ -193,6 +194,21 @@ export class EditMotorcycle implements OnInit {
 
   // ---------------- Main Image ----------------
 
+  // FILE SELECT
+  handleFile(file: File) {
+
+    console.log("handleFile : ",file)
+    this.selectedImage = file;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.mainImagePreview.set(reader.result as string);
+    };
+
+    reader.readAsDataURL(file);
+  }
+
   onImageSelected(event: Event): void {
 
     const input = event.target as HTMLInputElement;
@@ -202,12 +218,13 @@ export class EditMotorcycle implements OnInit {
     const file = input.files[0];
 
     this.selectedImage = file;
+    console.log("this.selectedImage : ",this.selectedImage);
 
     const reader = new FileReader();
 
     reader.onload = () => {
 
-      this.imagePreview = reader.result;
+      this.imagePreview.set(reader.result);
     };
 
     reader.readAsDataURL(file);
@@ -217,7 +234,7 @@ export class EditMotorcycle implements OnInit {
 
     this.selectedImage = null;
 
-    this.imagePreview = null;
+      this.imagePreview.set(null);
   }
 
   // ---------------- Multiple Images ----------------
@@ -326,7 +343,7 @@ export class EditMotorcycle implements OnInit {
 
     this.selectedImage = null;
 
-    this.imagePreview = null;
+    this.imagePreview.set(null);
 
     this.selectedImages = [];
 
@@ -343,16 +360,9 @@ export class EditMotorcycle implements OnInit {
       const control = this.form.get(key);
 
       if (control?.invalid) {
+        console.log('Field:',key);
 
-        console.log(
-          'Field:',
-          key
-        );
-
-        console.log(
-          'Errors:',
-          control.errors
-        );
+        console.log('Errors:',control.errors);
       }
     });
   }

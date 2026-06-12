@@ -1,12 +1,12 @@
 import { NgIf } from '@angular/common';
 import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../../services/Auth/auth.service';
 
 @Component({
   selector: 'app-top-bar',
-  imports: [NgIf],
+  imports: [NgIf,RouterLink],
   templateUrl: './top-bar.html',
   styleUrl: './top-bar.css',
 })

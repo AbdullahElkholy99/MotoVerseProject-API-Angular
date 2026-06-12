@@ -27,6 +27,14 @@
   border-radius: 1.5rem;
   padding: 1.5rem;
   backdrop-filter: blur(18px);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between
+
+}
+.paged{
+  flex:1;
 }
 
 .customer-table__header {

@@ -6,7 +6,7 @@ public partial class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<AddUserCommand, Customer>()
+        CreateMap<AddCustomerCommand, Customer>()
             .ForMember(des => des.UserName, src => src.MapFrom(opt => opt.Email));
     }
 }

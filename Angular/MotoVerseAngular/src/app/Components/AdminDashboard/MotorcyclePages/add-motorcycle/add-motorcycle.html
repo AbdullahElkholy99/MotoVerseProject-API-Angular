@@ -93,17 +93,12 @@
     </div>
 
     <!-- IMAGE -->
- <!-- MAIN IMAGE -->
+    <!-- MAIN IMAGE -->
     <div class="form-group full-width">
       <app-image-upload
         label="Motorcycle Main Image"
-        [preview]="
-          imagePreview()
-            ? 'https://localhost:7081/images/motorcycle/' + imagePreview()
-            : 'assets/images/defualt.jpg'
-        "
-        onImageSelected(file:
-        File)
+        [preview]="mainImagePreview()"
+        (fileSelected)="handleFile($event)"
       >
       </app-image-upload>
     </div>
@@ -117,9 +112,7 @@
       <div class="images-previews">
         @for (image of imagePreviews(); track $index) {
           <div class="image-item">
-            <app-image-upload label=""[preview]=" image
-            ?  image
-            : 'assets/images/defualt.jpg'" />
+            <app-image-upload label="" [preview]="image ? image : 'assets/images/defualt.jpg'" />
             <button type="button" (click)="removeImage($index)">Delete Image</button>
           </div>
         }
@@ -135,8 +128,8 @@
 
     <!-- FOOTER -->
     <div class="modal-footer full-width">
-      <button type="submit" class="submit-btn" [disabled]="isSubmitting">
-         {{ isSubmitting ? 'Creating...' : 'Create Motorcycle' }}
+      <button type="submit" class="submit-btn" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Creating...' : 'Create Motorcycle' }}
       </button>
     </div>
   </form>

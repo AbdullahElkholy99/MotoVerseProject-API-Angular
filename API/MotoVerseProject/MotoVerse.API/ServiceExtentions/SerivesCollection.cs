@@ -60,15 +60,21 @@ public static class SerivesCollection
     //EnableIUrlHelper
     public static IServiceCollection EnableIUrlHelper(this IServiceCollection services)
     {
+
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-        services.AddScoped<IUrlHelper>(serviceProvider =>
+        services.AddScoped<IUrlHelper>(sp =>
         {
-            var actionContext = serviceProvider
-                .GetRequiredService<IActionContextAccessor>()
-                .ActionContext;
+            var actionContextAccessor =
+                sp.GetRequiredService<IActionContextAccessor>();
 
-            var factory = serviceProvider.GetRequiredService<IUrlHelperFactory>();
+            var factory =
+                sp.GetRequiredService<IUrlHelperFactory>();
+
+            var actionContext = actionContextAccessor.ActionContext;
+
+            if (actionContext == null)
+                return null!;
 
             return factory.GetUrlHelper(actionContext);
         });
@@ -80,7 +86,7 @@ public static class SerivesCollection
     public static IServiceCollection AddHangfire(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHangfire(config =>
-     config
+        config
          // بيحدد طريقة تخزين البيانات بحيث تكون متوافقة مع النسخة
          .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
          //دي مسؤولة عن:
@@ -117,9 +123,9 @@ public static class SerivesCollection
         return services;
     }
 
-    public static IServiceCollection AddServiceRegisteration(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureIdentity(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIdentity<User, Role>(option =>
+        services.AddIdentity<User, MyRole>(option =>
         {
 
             // Password settings.
@@ -127,7 +133,7 @@ public static class SerivesCollection
             option.Password.RequireLowercase = true;
             option.Password.RequireNonAlphanumeric = true;
             option.Password.RequireUppercase = true;
-            option.Password.RequiredLength = 6;
+            option.Password.RequiredLength = 8;
             option.Password.RequiredUniqueChars = 1;
 
             // Lockout settings.
@@ -139,9 +145,10 @@ public static class SerivesCollection
             option.User.AllowedUserNameCharacters =
                         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
             option.User.RequireUniqueEmail = true;
-            //option.SignIn.RequireConfirmedEmail = true;
+            option.SignIn.RequireConfirmedEmail = true;
 
-        }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+        }).AddEntityFrameworkStores<AppDbContext>()
+        .AddDefaultTokenProviders();
 
         //JWT Authentication
         var jwtSettings = new JwtSettings();
@@ -210,10 +217,7 @@ public static class SerivesCollection
 
         var jwtKey = configuration["jwtSettings:secret"]!;
 
-        Console.WriteLine("============ JWT KEY:");
-        Console.WriteLine(jwtKey);
-        services.AddAuthentication(
-            options =>
+        services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -221,35 +225,19 @@ public static class SerivesCollection
             })
             .AddJwtBearer(options =>
             {
-                options.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        Console.WriteLine("------------------------------ ERROR:");
-                        Console.WriteLine(context.Exception.Message);
-
-                        return Task.CompletedTask;
-                    },
-
-                    OnTokenValidated = context =>
-                    {
-                        Console.WriteLine(" --------------------------------- TOKEN VALID");
-
-                        return Task.CompletedTask;
-                    }
-                };
-
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                                                  Encoding.UTF8.GetBytes(jwtKey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+
                     ValidateIssuer = false,
                     ValidIssuer = configuration["jwtSettings:Issuer"],
+
                     ValidateAudience = false,
                     ValidAudience = configuration["jwtSettings:Audience"],
+
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero    // No grace period
+                    ClockSkew = TimeSpan.Zero
                 };
                 options.Events = new JwtBearerEvents
                 {
@@ -257,14 +245,11 @@ public static class SerivesCollection
                     {
                         Console.WriteLine("--------------------------------TOKEN RECEIVED");
                         Console.WriteLine("AUTH HEADER:");
-                        Console.WriteLine(
-                            context.Request.Headers["Authorization"].ToString());
-
+                        Console.WriteLine(context.Request.Headers["Authorization"].ToString());
 
                         var authHeader = context.Request.Headers["Authorization"].ToString();
 
-                        if (!string.IsNullOrEmpty(authHeader) &&
-                            authHeader.StartsWith("Bearer "))
+                        if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
                         {
                             context.Token = authHeader["Bearer ".Length..].Trim();
                         }
@@ -278,8 +263,17 @@ public static class SerivesCollection
 
                     OnTokenValidated = context =>
                     {
-                        Console.WriteLine("TOKEN VALIDATED");
+                        Console.WriteLine("============================== TOKEN VALIDATED");
+
+                        foreach (var claim in context.Principal!.Claims)
+                        {
+                            Console.WriteLine($"{claim.Type} = {claim.Value}");
+                        }
+
+                        Console.WriteLine("============================== TOKEN VALIDATED");
                         return Task.CompletedTask;
+
+
                     },
 
                     OnAuthenticationFailed = context =>

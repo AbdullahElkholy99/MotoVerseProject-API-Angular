@@ -5,6 +5,7 @@ using MotoVerse.Core.Bases;
 namespace MotoVerse.API.Bases;
 
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class AppControllerBase : ControllerBase
 {
     #region Fields

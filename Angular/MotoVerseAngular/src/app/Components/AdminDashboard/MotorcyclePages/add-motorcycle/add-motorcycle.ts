@@ -39,8 +39,9 @@ export class AddMotorcycle implements OnInit {
   // Main Image
   selectedImage: File | null = null;
 
-imagePreview = signal<string | ArrayBuffer | null>(null);
-imagePreviews = signal<string[]>([]);
+  imagePreview = signal<string | ArrayBuffer | null>(null);
+  imagePreviews = signal<string[]>([]);
+mainImagePreview = signal<string>('assets/images/defualt.jpg');
   // Multiple Images
   selectedImages: File[] = [];
 
@@ -62,26 +63,11 @@ imagePreviews = signal<string[]>([]);
     },
   ];
 
-  isSubmitting = false;
+  isSubmitting = signal<boolean>(false);
 
   ngOnInit(): void {
 
     this.initializeForm();
-
-    // this.form.patchValue({
-    //   nameAr: 'Honda',
-    //   nameEn: 'Honda',
-    //   brand: 'Honda',
-    //   model: 'CBR 600RR',
-    //   year: 2024,
-    //   color: 'Black',
-    //   plateNumber: 'ABC-1234',
-    //   engineCC: 600,
-    //   pricePerDay: 150,
-    //   status: 1,
-    //   description:'Powerful sport motorcycle',
-    //   ownerId:'c47b1f93-0e04-43a5-b8ef-d0e00205bd44',
-    // });
   }
 
   // ----------------------------- initializeForm
@@ -112,8 +98,19 @@ imagePreviews = signal<string[]>([]);
   }
 
   // ---------------- Main Image ----------------
-  // ---------------- Main Image ----------------
+  handleFile(file: File) {
 
+    console.log("handleFile : ",file)
+    this.selectedImage = file;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.mainImagePreview.set(reader.result as string);
+    };
+
+    reader.readAsDataURL(file);
+  }
   onImageSelected(event: Event): void {
 
     const input = event.target as HTMLInputElement;
@@ -123,6 +120,7 @@ imagePreviews = signal<string[]>([]);
     const file = input.files[0];
 
     this.selectedImage = file;
+    console.log("this.selectedImage: ", this.selectedImage);
 
     const reader = new FileReader();
 
@@ -140,9 +138,7 @@ imagePreviews = signal<string[]>([]);
 
     this.imagePreview.set(null);
   }
-
   // ---------------- Multiple Images ----------------
-
   onMultipleImagesSelected(event: Event): void {
 
     const input =
@@ -166,7 +162,6 @@ imagePreviews = signal<string[]>([]);
       }
     );
   }
-
   removeImage(index: number): void {
 
     this.selectedImages.splice(index, 1);
@@ -184,29 +179,28 @@ imagePreviews = signal<string[]>([]);
       return;
     }
 
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
 
     const formData = this.fillFormData()
-    console.log("-------------------------- formData : ", formData);
 
     // API Call
     this.motorcycleService.create(formData).subscribe({
       next: (result) => {
 
         if (!result.succeeded) {
-          this.isSubmitting = false;
+          this.isSubmitting.set(false);
           this.toastr.error(result.message, 'Error');
           return;
         }
 
         this.toastr.success(result.message, 'Success');
-
+        this.imagePreview.set(null)
         this.resetForm();
       },
 
       error: (error) => {
 
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
 
         console.error(error);
         this.toastr.error(error?.error?.message || 'Something went wrong', 'Error');
@@ -238,6 +232,7 @@ imagePreviews = signal<string[]>([]);
 
     // Multiple Images
     if (this.selectedImages.length > 0) this.selectedImages.forEach((image) => { formData.append('Images', image); });
+    console.log("------ formData", [...formData]);
 
     return formData;
   }
@@ -251,10 +246,11 @@ imagePreviews = signal<string[]>([]);
     this.imagePreview.set(null);
 
     this.selectedImages = [];
+    this.selectedImage = null;
 
     this.imagePreviews.set([]);
 
-    this.isSubmitting = false;
+    this.isSubmitting.set(false);
 
     this.addedSuccess.emit(true)
   }

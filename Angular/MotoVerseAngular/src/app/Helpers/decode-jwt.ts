@@ -24,16 +24,16 @@ export function getUserInfo(): UserInfo[] {
   const decoded: any = jwtDecode(token);
 
   const imagePath = `https://localhost:7081/` +
- ( decoded.imagePath ||
-    decoded.ImagePath ||
-    decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/ImagePath']);
+    (decoded.imagePath ||
+      decoded.ImagePath ||
+      decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/ImagePath']);
 
-    const roles =
+  const roles =
     decoded.role ||
     decoded.Role ||
     decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
 
-  const UserInfo:UserInfo = {
+  const UserInfo: UserInfo = {
     displayName: decoded.name || decoded.Name || decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || '',
     email: decoded.email || decoded.Email || decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || '',
     imagePath: imagePath,
@@ -43,8 +43,8 @@ export function getUserInfo(): UserInfo[] {
 }
 
 interface UserInfo {
-  displayName :string
-  email :string
-  imagePath :string
-  roles:string[]
+  displayName: string
+  email: string
+  imagePath: string
+  roles: string[]
 }

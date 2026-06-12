@@ -4,14 +4,21 @@
   [ngClass]="[
     'ui-btn--' + type,
     fullWidth ? 'ui-btn--full' : '',
-    iconOnly ? 'ui-btn--icon' : ''
+    iconOnly ? 'ui-btn--icon' : '',
+    loading ? 'ui-btn--loading' : ''
   ]"
-  [disabled]="disabled"
+  [disabled]="disabled || loading"
   (click)="onClick()"
 >
-  <i *ngIf="icon" [class]="icon"></i>
+  <ng-container *ngIf="!loading; else spinnerTemplate">
+    <i *ngIf="icon" [class]="icon"></i>
 
-  <span *ngIf="!iconOnly">
-    {{ label }}
-  </span>
+    <span *ngIf="!iconOnly">
+      {{ label }}
+    </span>
+  </ng-container>
+
+  <ng-template #spinnerTemplate>
+    <span class="spinner"></span>
+  </ng-template>
 </button>

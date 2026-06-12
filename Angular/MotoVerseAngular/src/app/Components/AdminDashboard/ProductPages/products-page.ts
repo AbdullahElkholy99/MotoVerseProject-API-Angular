@@ -14,7 +14,6 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
-
 } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
 import { GetCategoryDTO } from '../../../models/Category/getCategory';
@@ -22,7 +21,7 @@ import { CategoryService } from '../../../services/category-service';
 import { ImageUpload } from "../../Shared/image-upload/image-upload";
 import { NoContent } from "../../Shared/no-content/no-content";
 import { UiButton } from "../../Shared/ui-button/ui-button";
-
+import { ProductSignalrService } from '../../../services/Products/product-signalr-service';
 @Component({
   selector: 'app-products-page',
   standalone: true,
@@ -35,6 +34,7 @@ import { UiButton } from "../../Shared/ui-button/ui-button";
 export class ProductsPage implements OnInit {
 
   // ----------------- injecting the category service
+  _productSignlRService = inject(ProductSignalrService);
   productService = inject(ProductService);
   categoryService = inject(CategoryService);
 
@@ -90,6 +90,32 @@ export class ProductsPage implements OnInit {
 
     // build form
     this.buildForm();
+
+    //start connectionsignalr
+    this.startConSignalR()
+
+  }
+
+  //start connection signalr
+  startConSignalR() {
+    this._productSignlRService
+      .startConnection()
+      .then(() => {
+        this._productSignlRService.onNewProduct(
+          (product: ProductDTO) => {
+
+            this.products.update(products => [
+              product,
+              ...products
+            ]);
+
+            this.totalItems.update(v => v + 1);
+
+            this.toastr.info(
+              `${product.name} Added`, 'New Product');
+          }
+        );
+      });
   }
 
   // --------------- Build the form productForm
@@ -141,6 +167,7 @@ export class ProductsPage implements OnInit {
     }
     return formData;
   }
+
   // ---------------  Add
   addProductRequest(formData: FormData) {
     this.productService.create(formData).subscribe({
@@ -152,8 +179,6 @@ export class ProductsPage implements OnInit {
         this.toastr.success(result.message);
         this.productForm.reset();
         this.imagePreview.set(null);
-
-        this.getAll();
       },
 
       error: (error) => {
@@ -164,6 +189,8 @@ export class ProductsPage implements OnInit {
       },
     });
   }
+
+
   // ---------------  Update
   updateProductRequest(formData: FormData) {
     formData.append('id', this.selectedId());
@@ -350,8 +377,6 @@ export class ProductsPage implements OnInit {
     });
   }
 
-
-
   // ----------------- pagination
   get PageCount() {
     return Math.ceil(this.totalItems() / this.itemsPerPage);
@@ -423,10 +448,6 @@ export class ProductsPage implements OnInit {
     this.productForm.reset()
     this.imagePreview.set(null)
   }
-
-
-
-
 
 
 

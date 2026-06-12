@@ -25,9 +25,4 @@
 	  <ProjectReference Include="..\MotoVerse.Core\MotoVerse.Core.csproj" />
 	  <ProjectReference Include="..\MotoVerse.Infrastructure\MotoVerse.Infrastructure.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\images\Motorcycle\" />
-    <Folder Include="wwwroot\images\Product\" />
-  </ItemGroup>
 </Project>

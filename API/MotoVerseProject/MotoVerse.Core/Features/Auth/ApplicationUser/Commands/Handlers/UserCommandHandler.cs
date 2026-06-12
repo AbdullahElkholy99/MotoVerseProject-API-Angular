@@ -1,12 +1,14 @@
-﻿using MotoVerse.Entities.Models.Users;
+﻿using MotoVerse.Core.Features.Auth.ConfirmEmailFeature.Command.Models;
+using MotoVerse.Entities.Models.Users;
 
 namespace MotoVerse.Core.Features.ApplicationUser.Commands.Handlers;
 
 public class UserCommandHandler : ResponseHandler,
-    IRequestHandler<AddUserCommand, Response<string>>,
-    IRequestHandler<EditUserCommand, Response<string>>,
+    IRequestHandler<AddCustomerCommand, Response<string>>,
     IRequestHandler<DeleteUserCommand, Response<string>>,
-    IRequestHandler<ChangeUserPasswordCommand, Response<string>>
+    IRequestHandler<UpdateUserInfoCommand, Response<string>>,
+
+    IRequestHandler<EditUserCommand, Response<string>>
 {
     #region Fields
     private readonly AppDbContext _context;
@@ -42,82 +44,40 @@ public class UserCommandHandler : ResponseHandler,
     #region Handle Functions
 
     #region Add User
-    public async Task<Response<string>> Handle(AddUserCommand request, CancellationToken cancellationToken)
-    {
-        //var identityUser = request.MapToUser();
-        var identityUser = _mapper.Map<Customer>(request);
-        //Create
-        var createResult = await AddUserAsync(identityUser, request.Password);
-        switch (createResult)
-        {
-            case "EmailIsExist": return BadRequest<string>(_sharedResources[SharedResourcesKeys.EmailIsExist]);
-            case "UserNameIsExist": return BadRequest<string>(_sharedResources[SharedResourcesKeys.UserNameIsExist]);
-            case "ErrorInCreateUser": return BadRequest<string>(_sharedResources[SharedResourcesKeys.FaildToAddUser]);
-            case "Failed": return BadRequest<string>(_sharedResources[SharedResourcesKeys.TryToRegisterAgain]);
-            case "Success": return Success<string>("Register is Success");
-            default: return BadRequest<string>(createResult);
-        }
-    }
-    public async Task<string> AddUserAsync(User user, string password)
+    public async Task<Response<string>> Handle(AddCustomerCommand request, CancellationToken cancellationToken)
     {
         var trans = await _context.Database.BeginTransactionAsync();
         try
         {
-            //if Email is Exist
-            var existUser = await _userManager.FindByEmailAsync(user.Email);
-            //email is Exist
-            if (existUser != null) return "EmailIsExist";
-
+            var user = _mapper.Map<Customer>(request);
 
             //Create
-            var createResult = await _userManager.CreateAsync(user, password);
+            var createResult = await _userManager.CreateAsync(user, request.Password);
+
             //Failed
             if (!createResult.Succeeded)
-                return string.Join(",", createResult.Errors.Select(x => x.Description).ToList());
+                return BadRequest<string>(_sharedResources[SharedResourcesKeys.FaildToAddUser]);
+            var roleResult = await _userManager.AddToRoleAsync(user, "Customer");
 
-
-            await _userManager.AddToRoleAsync(user, "User");
-
-            //Send Confirm Email
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-            var resquestAccessor = _httpContextAccessor.HttpContext.Request;
-
-            var urlActionContext = new UrlActionContext
-            {
-                Action = "ConfirmEmail",
-                Controller = "ConfirmEmail",
-                Values = new
-                {
-                    userId = (await _mediator.Send(new EncryptionProviderCommand { Data = user.Id.ToString() })).Data,
-                    code = (await _mediator.Send(new EncryptionProviderCommand { Data = code })).Data
-                }
-            };
-            var returnUrl = resquestAccessor.Scheme + "://" + resquestAccessor.Host + _urlHelper.Action(urlActionContext);
-
-            var message = $"To Confirm Email Click Link: <a href='{returnUrl}'>Link Of Confirmation</a>";
-
-            //message or body
-            await _mediator.Send(new SendEmailCommand
-            {
-                Email = user.Email,
-                Message = message,
-                Subject = "Confirm Your Email"
-            });
-
+            if (!roleResult.Succeeded)
+                return BadRequest<string>(_sharedResources[SharedResourcesKeys.FailedToAssignRole]);
 
             await trans.CommitAsync();
 
-            return "Success";
+            // send confirmation email  : 
+            await _mediator.Send(new SendEmailConfirmationCommand()
+            {
+                User = user
+            });
+
+            return Success<string>("Register is Success", message: "Register is Success");
         }
         catch (Exception ex)
         {
-            await trans.RollbackAsync();
-            return "Failed";
+            return BadRequest<string>(_sharedResources[SharedResourcesKeys.TryToRegisterAgain]);
         }
 
     }
-
 
     #endregion
 
@@ -143,51 +103,60 @@ public class UserCommandHandler : ResponseHandler,
         //message
         return Success((string)_sharedResources[SharedResourcesKeys.Updated]);
     }
+    public async Task<Response<string>> Handle(UpdateUserInfoCommand request, CancellationToken cancellationToken)
+    {
+        var userId = (await _mediator.Send(new GetUserIdQuery())).Data;
+
+        if (userId is null)
+            return BadRequest<string>((string)_sharedResources[SharedResourcesKeys.ChangePassFailed]);
+
+        //check if user is exist
+        var oldUser = await _userManager.FindByIdAsync(userId);
+
+        //if Not Exist notfound
+        if (oldUser == null) return NotFound<string>();
+
+        oldUser.DisplayName = request.Name;
+        oldUser.Email = request.Email;
+        oldUser.PhoneNumber = request.PhoneNumber;
+
+        //update
+        var result = await _userManager.UpdateAsync(oldUser);
+
+        //result is not success
+        if (!result.Succeeded) return BadRequest<string>(_sharedResources[SharedResourcesKeys.UpdateFailed]);
+
+        //message
+        return Success((string)_sharedResources[SharedResourcesKeys.Updated]);
+    }
 
     #endregion
 
     #region Delete User
-    //  15e89450-05c4-4fbb-b3c0-5f349ae9afbd
     public async Task<Response<string>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         //check if user is exist
         var user = await _userManager.FindByIdAsync(request.Id.ToString());
+
         //if Not Exist notfound
         if (user == null) return NotFound<string>();
+
         string message = user.IsActive ? "Success Deleted" : "Success Activated";
+
         //Delete the User
         user.IsActive = !user.IsActive;
+
         var result = await _userManager.UpdateAsync(user);
+
         //in case of Failure
-        if (!result.Succeeded) return BadRequest<string>(_sharedResources[SharedResourcesKeys.DeletedFailed]);
+        if (!result.Succeeded)
+            return BadRequest<string>(_sharedResources[SharedResourcesKeys.DeletedFailed]);
 
         return Success(message, message: message);
     }
 
     #endregion
 
-
-    #region change password
-    public async Task<Response<string>> Handle(ChangeUserPasswordCommand request, CancellationToken cancellationToken)
-    {
-        //get user
-        //check if user is exist
-        var user = await _userManager.FindByIdAsync(request.Id.ToString());
-        //if Not Exist notfound
-        if (user == null) return NotFound<string>();
-
-        //Change User Password
-        var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-        //var user1=await _userManager.HasPasswordAsync(user);
-        //await _userManager.RemovePasswordAsync(user);
-        //await _userManager.AddPasswordAsync(user, request.NewPassword);
-
-        //result
-        if (!result.Succeeded) return BadRequest<string>(result.Errors.FirstOrDefault().Description);
-        return Success((string)_sharedResources[SharedResourcesKeys.Success]);
-    }
-
-    #endregion
 
     #endregion
 }

@@ -94,17 +94,11 @@
 
     <!-- MAIN IMAGE -->
     <div class="form-group full-width">
-      <app-image-upload
-        label="Motorcycle Main Image"
-        [preview]="
-          imagePreview
-            ? 'https://localhost:7081/images/motorcycle/' + imagePreview
-            : 'assets/images/defualt.jpg'
-        "
-        onImageSelected(file:
-        File)
-      >
-      </app-image-upload>
+<app-image-upload
+  label="Motorcycle Main Image"
+  [preview]="mainImagePreview()"
+  (fileSelected)="handleFile($event)">
+</app-image-upload>
     </div>
 
     <!-- MULTIPLE IMAGES -->

@@ -4,7 +4,7 @@ namespace MotoVerse.Infrastructure.IRepository.Base;
 
 public interface IRepositoryManager
 {
-    IRefreshTokenRepository RefreshTokenRepository { get; }
+    //IRefreshTokenRepository RefreshTokenRepository { get; }
 
     IProductRepository ProductRepository { get; }
     IReviewProductRepository ReviewProductRepository { get; }

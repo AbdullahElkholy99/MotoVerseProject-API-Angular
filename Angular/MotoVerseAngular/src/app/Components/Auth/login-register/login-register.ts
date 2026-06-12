@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { RegisterPage } from "../register-page/register-page";
 import { AuthService } from '../../../services/Auth/auth.service';
+import { getUserInfo, getUserRole } from '../../../Helpers/decode-jwt';
 
 @Component({
   selector: 'app-login-register',
@@ -80,15 +81,15 @@ export class LoginRegister {
         localStorage.setItem('token', token);
 
         this.isSubmitting.set(false);
-
-         this.router.navigate(['/home']);
+        this.authService.redirectAfterLogin();
       },
 
       error: (error) => {
         this.isSubmitting.set(false);
 
         this.toastr.error(
-          error?.error?.message || 'Something went wrong',
+          error?.error?.message ||
+          'Something went wrong',
           'Error'
         );
       },

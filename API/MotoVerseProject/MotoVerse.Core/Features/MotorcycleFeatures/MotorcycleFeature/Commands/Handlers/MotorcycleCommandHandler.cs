@@ -1,6 +1,7 @@
 ﻿
 
 using Hangfire;
+using MotoVerse.Core.Features.CurrentUserFeature.Queries.Models;
 
 namespace MotoVerse.Core.Features.MotorcycleFeatures.MotorcycleFeature.Commands.Handlers;
 
@@ -38,21 +39,19 @@ public class MotorcycleCommandHandler :
 
     #region Add Motorcycle
 
-    public async Task<Response<string>> Handle(
-        AddMotorcycleCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Response<string>> Handle(AddMotorcycleCommand request, CancellationToken cancellationToken)
     {
-        await using var transaction =
-            await _repositoryManager
-                .MotorcycleRepository
-                .BeginTransactionAsync();
-
+        await using var transaction = await _repositoryManager.MotorcycleRepository.BeginTransactionAsync();
         string? mainImage = null;
 
         var uploadedImages = new List<string>();
 
         try
         {
+            var OwnerId = (await _mediator.Send(new GetUserIdQuery())).Data;
+            if (OwnerId is null)
+                return BadRequest<string>("Added Category Failed");
+
             var motorcycle = new Motorcycle
             {
                 Id = Guid.NewGuid().ToString(),
@@ -76,7 +75,8 @@ public class MotorcycleCommandHandler :
 
                 Status = request.Status,
 
-                OwnerId = request.OwnerId
+                OwnerId = OwnerId,
+
             };
 
             // Main Image
@@ -94,18 +94,12 @@ public class MotorcycleCommandHandler :
 
                 motorcycle.Images = images;
 
-                uploadedImages = images
-                    .Select(x => x.ImageUrl)
-                    .ToList();
+                uploadedImages = images.Select(x => x.ImageUrl).ToList();
             }
 
-            await _repositoryManager
-                .MotorcycleRepository
-                .AddAsync(motorcycle);
+            await _repositoryManager.MotorcycleRepository.AddAsync(motorcycle);
 
-            await _repositoryManager
-                .MotorcycleRepository
-                .SaveChangesAsync();
+            await _repositoryManager.MotorcycleRepository.SaveChangesAsync();
 
             await transaction.CommitAsync();
 
@@ -131,16 +125,10 @@ public class MotorcycleCommandHandler :
 
     #region Edit Motorcycle
 
-    #region Edit Motorcycle
 
-    public async Task<Response<string>> Handle(
-        EditMotorcycleCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Response<string>> Handle(EditMotorcycleCommand request, CancellationToken cancellationToken)
     {
-        await using var transaction =
-            await _repositoryManager
-                .MotorcycleRepository
-                .BeginTransactionAsync();
+        await using var transaction = await _repositoryManager.MotorcycleRepository.BeginTransactionAsync();
 
         string? newMainImage = null;
 
@@ -148,30 +136,17 @@ public class MotorcycleCommandHandler :
 
         try
         {
-            Motorcycle? motorcycle =
-                await _repositoryManager
-                    .MotorcycleRepository
-                    .GetByIdWithIncludeAsync(
-                        request.Id,
-                        x => x.Images);
+            Motorcycle? motorcycle = await _repositoryManager.MotorcycleRepository.GetByIdWithIncludeAsync(request.Id, x => x.Images);
 
             if (motorcycle is null)
                 return NotFound<string>("Motorcycle Not Found");
 
-            // =========================
-            // Upload New Main Image
-            // =========================
 
             if (request.ImageFile is not null)
             {
                 newMainImage =
                     await UploadMainImage(request.ImageFile);
             }
-
-            // =========================
-            // Upload New Multiple Images
-            // =========================
-
             List<MotorcycleImage>? newImages = null;
 
             if (request.Images?.Length > 0)
@@ -185,38 +160,26 @@ public class MotorcycleCommandHandler :
                         .ToList();
             }
 
-            // =========================
+            var OwnerId = (await _mediator.Send(new GetUserIdQuery())).Data;
+            if (OwnerId is null)
+                return BadRequest<string>("Added Category Failed");
+
+
             // Mapping
-            // =========================
-
             motorcycle.NameAr = request.NameAr;
-
             motorcycle.NameEn = request.NameEn;
-
             motorcycle.Brand = request.Brand;
-
             motorcycle.Model = request.Model;
-
             motorcycle.Year = request.Year;
-
             motorcycle.Color = request.Color;
-
             motorcycle.PlateNumber = request.PlateNumber;
-
             motorcycle.EngineCC = request.EngineCC;
-
             motorcycle.PricePerDay = request.PricePerDay;
-
             motorcycle.Description = request.Description;
-
             motorcycle.Status = request.Status;
+            motorcycle.OwnerId = OwnerId;
 
-            motorcycle.OwnerId = request.OwnerId;
-
-            // =========================
             // Replace Main Image
-            // =========================
-
             if (newMainImage is not null)
             {
                 var oldMainImage = motorcycle.ImagePath;
@@ -225,32 +188,20 @@ public class MotorcycleCommandHandler :
 
                 await DeleteImage(oldMainImage);
             }
-
-            // =========================
             // Replace Multiple Images
-            // =========================
-
             if (newImages is not null)
             {
                 foreach (var oldImage in motorcycle.Images.ToList())
                 {
                     await DeleteImage(oldImage.ImageUrl);
 
-                    await _repositoryManager
-                        .MotorcycleImageRepository
-                        .DeleteAsync(oldImage);
+                    await _repositoryManager.MotorcycleImageRepository.DeleteAsync(oldImage);
                 }
 
                 motorcycle.Images = newImages;
             }
-
-            // =========================
             // Save Changes
-            // =========================
-
-            await _repositoryManager
-                .MotorcycleRepository
-                .SaveChangesAsync();
+            await _repositoryManager.MotorcycleRepository.SaveChangesAsync();
 
             await transaction.CommitAsync();
 
@@ -277,7 +228,7 @@ public class MotorcycleCommandHandler :
     }
 
     #endregion
-    #endregion
+
 
     #region Delete Motorcycle
 

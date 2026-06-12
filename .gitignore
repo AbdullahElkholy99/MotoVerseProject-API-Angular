@@ -31,6 +31,7 @@ publish_output/
 # EF Core Migrations Bundle
 efbundle.exe
 
+appsettings.json
 # ==========================
 # App Settings & Secrets
 # ==========================
@@ -130,3 +131,5 @@ coverage/
 # ==========================
 
 *.generated.cs
+
+motocycleRental.mp4

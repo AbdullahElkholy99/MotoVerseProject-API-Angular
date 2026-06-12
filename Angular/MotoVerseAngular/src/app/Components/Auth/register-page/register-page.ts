@@ -53,13 +53,23 @@ export class RegisterPage {
 
     this.step2 = this.fb.group({
       address: ['', Validators.required],
-      country: ['', Validators.required],
-      phoneNumber: ['', [Validators.required, Validators.pattern(/^\+?\d{8,12}$/)]],
+      phoneNumber: ['', [Validators.required,
+        Validators.maxLength(11),
+         Validators.pattern(/^\+?\d{8,12}$/)]],
     });
 
     this.step3 = this.fb.group(
       {
-        password: ['', [Validators.required, Validators.minLength(8)]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/
+            ),
+          ],
+        ],
         confirmPassword: ['', Validators.required],
       },
       { validators: passwordMatchValidator },
@@ -105,14 +115,20 @@ export class RegisterPage {
 
     if (this.step3.invalid) {
       this.step3.markAllAsTouched();
+
+      this.showStep3Errors();
+      this.isSubmitting = false;
+
       return;
     }
+
 
     const payload: AddUserDTO = {
       ...this.step1.value,
       ...this.step2.value,
       ...this.step3.value,
     };
+
 
     this.authService.register(payload).subscribe({
       next: (result) => {
@@ -124,7 +140,6 @@ export class RegisterPage {
           return;
         }
         this.isSubmitting = false;
-
 
         this.toastr.success(result.message, 'Success');
         // this.router.navigate(['/login']);
@@ -143,9 +158,49 @@ export class RegisterPage {
       error: (error) => {
         console.error(error);
         this.isSubmitting = false;
-
         this.toastr.error(error?.error?.message || 'Something went wrong', 'Error');
       },
     });
+  }
+
+  private showStep3Errors(): void {
+    const errors: string[] = [];
+
+    const password = this.step3.get('password');
+    const confirmPassword = this.step3.get('confirmPassword');
+
+    if (password?.hasError('required')) {
+      errors.push('Password is required');
+    }
+
+    if (password?.hasError('minlength')) {
+      errors.push('Password must be at least 8 characters');
+    }
+
+    if (password?.hasError('pattern')) {
+      errors.push('Password must contain:');
+      errors.push('• One uppercase letter');
+      errors.push('• One lowercase letter');
+      errors.push('• One number');
+      errors.push('• One special character');
+    }
+
+    if (confirmPassword?.hasError('required')) {
+      errors.push('Confirm password is required');
+    }
+
+    if (this.step3.hasError('passwordsMismatch')) {
+      errors.push('Passwords do not match');
+    }
+
+    this.toastr.error(
+      errors.join('<br>'),
+      'Validation Error',
+      {
+        enableHtml: true,
+        timeOut: 5000,
+        closeButton: true
+      }
+    );
   }
 }

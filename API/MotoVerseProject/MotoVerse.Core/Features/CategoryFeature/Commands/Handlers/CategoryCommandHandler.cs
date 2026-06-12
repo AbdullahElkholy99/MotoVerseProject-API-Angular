@@ -1,7 +1,6 @@
 ﻿
 using MotoVerse.Core.Features.CategoryFeature.Commands.Models;
-using MotoVerse.Core.Features.Shared.UploadImage.Commands.Models;
-using MotoVerse.Infrastructure.IRepository.Base;
+using MotoVerse.Core.Features.CurrentUserFeature.Queries.Models;
 
 namespace MotoVerse.Core.Features.CategoryFeature.Commands.Handlers;
 
@@ -41,7 +40,13 @@ internal class CategoryCommandHandler :
         {
             var category = _mapper.Map<Category>(request);
 
+            var adminId = (await _mediator.Send(new GetUserIdQuery())).Data;
+            if (adminId is null)
+                return BadRequest<string>("Added Category Failed");
+
+
             category.Id = Guid.NewGuid().ToString();
+            category.AdminId = adminId;
 
             if (request.ImageFile is not null)
             {
@@ -97,7 +102,16 @@ internal class CategoryCommandHandler :
                 request.ImagePath = imagePath;
             }
 
-            _mapper.Map(request, category);
+            var adminId = (await _mediator.Send(new GetUserIdQuery())).Data;
+            if (adminId is null)
+                return BadRequest<string>("Added Category Failed");
+
+            // mapping 
+            category.AdminId = adminId;
+            category.NameEn = request.NameEn;
+            category.NameAr = request.NameEn;
+            category.Description = request.Description;
+
 
             await _repositoryManager.CategoryRepository.UpdateAsync(category);
 

@@ -1,6 +1,7 @@
 using Hangfire;
 using LegalFlow.API.ServiceExtentions;
 using MotoVerse.API.Attributes;
+using MotoVerse.Core.Features.RealTime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,20 +11,23 @@ builder.Services.AddControllers();
 // Register Swagger
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddSignalR();
 #region DI
-
+builder.Services.AddAuthentication();
 builder.Services
     .RegisterSwaggerGen(builder.Configuration)
     .InfrastructureDependencies(builder.Configuration)
     .CoreDependencies(builder.Configuration)
     .EnableLocalization()
-    .EnableIUrlHelper()
     .AddHttpContextAccessor()
     .EnableCORS()
     .AddHangfire(builder.Configuration)
     .AddServiceAuthentication(builder.Configuration)
     .AddServiceAuthorization(builder.Configuration)
-    .AddServiceRegisteration(builder.Configuration);
+    .ConfigureIdentity(builder.Configuration);
+
+builder.Services
+    .EnableIUrlHelper();
 
 #endregion
 
@@ -49,6 +53,7 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 });
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
+app.MapHub<ProductHub>("/productHub");
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAngular");
@@ -84,6 +89,6 @@ public class TokenMiddleware
 /*
  login : 
     elkholyA23@gmail.com            -           elkholyA23@gmail.com
-    abdullah.ali.elkholy@gmail.com  -  A32bdullah.ali.elkholy@gmail.com
+    Admin Accant : abdullah.ali.elkholy@gmail.com  -  A1!abdullah.ali.elkholy@gmail.com
  
  */

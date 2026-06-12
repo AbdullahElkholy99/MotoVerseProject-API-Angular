@@ -11,42 +11,31 @@
     </button>
 
     <button type="button" class="topbar__profile" (click)="toggleProfile()">
-      <img
-        [src]="image"
-        alt="Admin avatar"
-      />
-      <span>{{name}}</span>
+      <img [src]="image" alt="Admin avatar" />
+      <span>{{ name }}</span>
       <i class="ri-arrow-down-s-line"></i>
     </button>
 
     <div class="profile-menu" *ngIf="profileSettingToggle()">
-      <button class="menu-item" *ngIf="isLoggin">
+      <a class="menu-item" *ngIf="isLoggin" routerLink="/admin/settings">
         <i class="ri-settings-3-line"></i>
         <span>Settings</span>
+      </a>
+
+      <button class="menu-item login" *ngIf="!isLoggin" (click)="login()">
+        <i class="ri-login-box-line"></i>
+        <span>Login</span>
       </button>
 
-      <button class="menu-item" *ngIf="isLoggin">
-        <i class="ri-user-line"></i>
-        <span>Profile</span>
+      <button class="menu-item register" *ngIf="!isLoggin" (click)="register()">
+        <i class="ri-user-add-line"></i>
+        <span>Register</span>
       </button>
-
-<button class="menu-item login" *ngIf="!isLoggin" (click)="login()">
-  <i class="ri-login-box-line"></i>
-  <span>Login</span>
-</button>
-
-<button class="menu-item register" *ngIf="!isLoggin" (click)="register()">
-  <i class="ri-user-add-line"></i>
-  <span>Register</span>
-</button>
-
 
       <button class="menu-item logout" *ngIf="isLoggin" (click)="logout()">
         <i class="ri-logout-box-r-line"></i>
         <span>Logout</span>
       </button>
-
-
     </div>
   </div>
 </header>

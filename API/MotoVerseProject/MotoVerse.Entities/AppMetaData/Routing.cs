@@ -69,10 +69,11 @@ public static class Routing
         public const string Prefix = Rule + "/User";
         public const string Create = Prefix + "/Create";
         public const string Paginated = Prefix + "/Paginated";
+        public const string GetInfo = Prefix + "/get-info";
         public const string GetByID = $"{Prefix}/{getById}";
         public const string Edit = Prefix + "/Edit";
+        public const string UpdateInfo = Prefix + "/update-info";
         public const string Delete = Prefix + "/Delete/{id}";
-        public const string ChangePassword = Prefix + "/Change-Password";
     }
     public static class Authentication
     {
@@ -91,6 +92,7 @@ public static class Routing
         public const string SendResetPasswordCode = Prefix + "/SendResetPasswordCode";
         public const string ConfirmResetPasswordCode = Prefix + "/ConfirmResetPasswordCode";
         public const string ResetPassword = Prefix + "/ResetPassword";
+        public const string ChangePassword = Prefix + "/change-password";
 
     }
     public static class ConfirmEmail

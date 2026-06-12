@@ -6,7 +6,7 @@ namespace MotoVerse.Core.Mapping.Roles
     {
         public void GetRoleByIdMapping()
         {
-            CreateMap<Role, GetRoleByIdResult>();
+            CreateMap<MyRole, GetRoleByIdResult>();
         }
     }
 }

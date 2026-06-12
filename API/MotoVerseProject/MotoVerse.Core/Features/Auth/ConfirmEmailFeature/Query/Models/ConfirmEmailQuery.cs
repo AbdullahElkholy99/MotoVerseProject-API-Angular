@@ -6,7 +6,3 @@ public class ConfirmEmailQuery : IRequest<Response<string>>
     public string Code { get; set; }
 }
 
-public class SendConfirmEmailQuery : IRequest<Response<bool>>
-{
-    public string? Email { get; set; }
-}

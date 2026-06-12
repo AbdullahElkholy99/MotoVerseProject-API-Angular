@@ -1,7 +1,10 @@
 ﻿
 
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using MotoVerse.Entities.Models.Auth;
 using MotoVerse.Entities.Models.Motorcycles;
+using MyRole = MotoVerse.Entities.Models.Auth.MyRole;
 
 namespace MotoVerse.Infrastructure.Data;
 
@@ -20,7 +23,7 @@ public class AppDbContextFactory
         return new AppDbContext(optionsBuilder.Options);
     }
 }
-public class AppDbContext : IdentityDbContext<User, MotoVerse.Data.Entities.Auth.Role, string>
+public class AppDbContext : IdentityDbContext<User, MyRole, string>
 {
 
     #region CTOR
@@ -46,7 +49,6 @@ public class AppDbContext : IdentityDbContext<User, MotoVerse.Data.Entities.Auth
 
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
-
     public DbSet<Coupon> Coupons => Set<Coupon>();
 
     #region MotoCycle
@@ -63,6 +65,12 @@ public class AppDbContext : IdentityDbContext<User, MotoVerse.Data.Entities.Auth
 
     #endregion
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.ConfigureWarnings(w =>
+        w.Ignore(RelationalEventId.PendingModelChangesWarning));
+    }
     // OnModelCreating
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

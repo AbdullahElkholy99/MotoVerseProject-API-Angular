@@ -1,4 +1,5 @@
 ﻿using AutoMapper.QueryableExtensions;
+using MotoVerse.Core.Features.CurrentUserFeature.Queries.Models;
 using MotoVerse.Core.Features.MotorcycleFeatures.BookingFeature.Queries.Models;
 using MotoVerse.Core.Features.MotorcycleFeatures.BookingFeature.Queries.Responses;
 using MotoVerse.Entities.Enums.Motorcycles;
@@ -17,6 +18,7 @@ internal class BookingQueryHandler :
 
     private readonly IRepositoryManager _repositoryManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IMediator _mediator;
 
     private readonly IMapper _mapper;
 
@@ -28,64 +30,66 @@ internal class BookingQueryHandler :
         IRepositoryManager repositoryManager,
         IMapper mapper,
         IStringLocalizer<SharedResources> localizer,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IMediator mediator)
         : base(localizer)
     {
         _repositoryManager = repositoryManager;
         _mapper = mapper;
         _httpContextAccessor = httpContextAccessor;
+        _mediator = mediator;
     }
 
     #endregion
 
     public async Task<Response<List<GetBookingListResponse>>> Handle(GetBookingListForCustomerQuery request, CancellationToken cancellationToken)
     {
-        var customerId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? "15e89450-05c4-4fbb-b3c0-5f349ae9afbd";
+        var customerId = (await _mediator.Send(new GetUserIdQuery())).Data;
         var bookings = await _repositoryManager
-    .BookingRepository
-    .GetTableNoTracking()
-    .Where(x => x.CustomerId == customerId)
-    .Select(x => new GetBookingListResponse
-    {
-        Id = x.Id,
-        StartDate = x.StartDate,
-        EndDate = x.EndDate,
-        TotalPrice = x.TotalPrice,
-        TotalDays = x.TotalDays,
-
-        BookingStatus = x.BookingStatus.ToString(),
-        PaymentStatus = x.PaymentStatus.ToString(),
-
-        CreatedAt = x.CreatedAt,
-        PickupLocation = x.PickupLocation ?? "no select",
-
-        Payment = x.Payment == null
-            ? null
-            : new PaymentDTO
+            .BookingRepository
+            .GetTableNoTracking()
+            .Where(x => x.CustomerId == customerId)
+            .Select(x => new GetBookingListResponse
             {
-                Id = x.Payment.Id,
-                Amount = x.Payment.Amount,
-                Method = x.Payment.PaymentMethod.ToString(),
-                Provider = x.Payment.Provider.ToString(),
-                TransactionId = x.Payment.TransactionId,
-                PaidAt = x.Payment.PaidAt
-            },
+                Id = x.Id,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                TotalPrice = x.TotalPrice,
+                TotalDays = x.TotalDays,
 
-        Motorcycle = new MotorcycleDTO
-        {
-            Id = x.Motorcycle.Id,
-            Name = x.Motorcycle.NameEn,
-            Brand = x.Motorcycle.Brand,
-            Model = x.Motorcycle.Model,
-            PricePerDay = x.Motorcycle.PricePerDay,
-            OwnerName = x.Motorcycle.Owner.DisplayName ?? "Unknown",
-            ImagePath = "https://localhost:7081/images/motorcycle/" + x.Motorcycle.ImagePath,
-            ImagesPath = x.Motorcycle.Images
-                .Select(i => "https://localhost:7081/images/motorcycle/" + i.ImageUrl)
-                .ToArray()
-        }
-    })
-    .ToListAsync();
+                BookingStatus = x.BookingStatus.ToString(),
+                PaymentStatus = x.PaymentStatus.ToString(),
+
+                CreatedAt = x.CreatedAt,
+                PickupLocation = x.PickupLocation ?? "no select",
+
+                Payment = x.Payment == null
+                    ? null
+                    : new PaymentDTO
+                    {
+                        Id = x.Payment.Id,
+                        Amount = x.Payment.Amount,
+                        Method = x.Payment.PaymentMethod.ToString(),
+                        Provider = x.Payment.Provider.ToString(),
+                        TransactionId = x.Payment.TransactionId,
+                        PaidAt = x.Payment.PaidAt
+                    },
+
+                Motorcycle = new MotorcycleDTO
+                {
+                    Id = x.Motorcycle.Id,
+                    Name = x.Motorcycle.NameEn,
+                    Brand = x.Motorcycle.Brand,
+                    Model = x.Motorcycle.Model,
+                    PricePerDay = x.Motorcycle.PricePerDay,
+                    OwnerName = x.Motorcycle.Owner.DisplayName ?? "Unknown",
+                    ImagePath = "https://localhost:7081/images/motorcycle/" + x.Motorcycle.ImagePath,
+                    ImagesPath = x.Motorcycle.Images
+                        .Select(i => "https://localhost:7081/images/motorcycle/" + i.ImageUrl)
+                        .ToArray()
+                }
+            })
+            .ToListAsync();
 
         var result = Success(bookings);
 
@@ -159,9 +163,7 @@ internal class BookingQueryHandler :
         return result;
     }
 
-    public async Task<Response<GetBasketByIdResponse>> Handle(
-        GetBookingByIdQuery request,
-        CancellationToken cancellationToken)
+    public async Task<Response<GetBasketByIdResponse>> Handle(GetBookingByIdQuery request, CancellationToken cancellationToken)
     {
         var booking =
             await _repositoryManager
@@ -177,10 +179,7 @@ internal class BookingQueryHandler :
         return Success(mapped);
     }
 
-    public async Task<PaginatedResult<GetBookingPaginatedListResponse>>
-        Handle(
-            GetBookingPaginatedListQuery request,
-            CancellationToken cancellationToken)
+    public async Task<PaginatedResult<GetBookingPaginatedListResponse>> Handle(GetBookingPaginatedListQuery request, CancellationToken cancellationToken)
     {
         var query =
             _repositoryManager
